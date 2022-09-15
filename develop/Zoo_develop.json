@@ -2,7 +2,7 @@
     "openapi": "3.0.3",
     "info": {
         "title": "Zoo_develop APIs",
-        "description": "this document contains all the APIs provided by iguana",
+        "description": "this document contains all the APIs provided by Zoo",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
             "email": "apiteam@swagger.io"
