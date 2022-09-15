@@ -5,7 +5,7 @@
         "description": "this document contains all the APIs provided by iguana",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
-            "email": "apiteam@swagger.io"
+            "email": "developer@dipal.ru"
         },
         "license": {
             "name": "Apache 2.0",
