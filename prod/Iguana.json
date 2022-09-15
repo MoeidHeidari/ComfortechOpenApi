@@ -1,0 +1,2783 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Iguana APIs",
+        "description": "this document contains all the APIs provided by iguana",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "email": "developer@dipal.ru"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.11"
+    },
+    "externalDocs": {
+        "description": "Find out more about Swagger",
+        "url": "http://swagger.io"
+    },
+    "tags": [
+        {
+            "name": "Profile",
+            "description": "Profile APIs (services, devices, set data etc etc)"
+        },
+        {
+            "name": "User places",
+            "description": "User places APIs (adding removing etc)"
+        },
+        {
+            "name": "Room",
+            "description": "Room APIs (adding removing etc)"
+        },
+        {
+            "name": "User devices",
+            "description": "User devices APIs (connecting, removing etc)"
+        },
+        {
+            "name": "User services",
+            "description": "User services APIs (subscribing, removing, etc)"
+        },
+        {
+            "name": "Services",
+            "description": "Providable services APIs (eg list available)"
+        },
+        {
+            "name": "Camera",
+            "description": "Camera APIs (eg list available)"
+        },
+        {
+            "name": "Intercom",
+            "description": "Intercom APIs (eg list available)"
+        },
+        {
+            "name": "Device",
+            "description": "Device APIs (eg list available or get information of some specific device)"
+        },
+        {
+            "name": "Smarthome",
+            "description": "List of smarthome APIs for working with smarthome devices"
+        },
+        {
+            "name": "Activity tracker",
+            "description": "User profile activity tracker APIs"
+        },
+        {
+            "name": "Settings",
+            "description": "User app settings APIs"
+        },
+        {
+            "name": "Metrics",
+            "description": "Metrics APIs"
+        },
+        {
+            "name": "Billing",
+            "description": "Billing APIs (eg connect billing account)"
+        },
+        {
+            "name": "Account",
+            "description": "Account APIs (keycloak)"
+        },
+        {
+            "name": "Üseless for frontend",
+            "description": "Some APIs that frontenders wouldn't probably need in future"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "bearer": {
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "type": "http"
+            }
+        },
+        "schemas": {
+            "": {
+                "type": "object",
+                "properties": {
+                    "service_id": {
+                        "type": "string"
+                    },
+                    "current_plan_id": {
+                        "type": "string"
+                    },
+                    "place_id": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "service_id",
+                    "place_id"
+                ]
+            },
+            "SetPasswordDTO": {
+                "type": "object",
+                "properties": {
+                    "activation_code": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "activation_code",
+                    "password"
+                ]
+            },
+            "ResetPasswordRequestInputDTO": {
+                "type": "object",
+                "properties": {
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "password"
+                ]
+            },
+            "ServiceDto": {
+                "type": "object",
+                "properties": {
+                    "service_id": {
+                        "type": "string"
+                    },
+                    "is_muted": {
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "service_id",
+                    "is_muted"
+                ]
+            },
+            "NotificationDto": {
+                "type": "object",
+                "properties": {
+                    "do_not_disturb": {
+                        "type": "boolean"
+                    },
+                    "services": {
+                        "$ref": "#/components/schemas/ServiceDto"
+                    }
+                },
+                "required": [
+                    "do_not_disturb",
+                    "services"
+                ]
+            },
+            "PlatformDto": {
+                "type": "object",
+                "properties": {
+                    "platform": {
+                        "type": "string"
+                    },
+                    "light_mode": {
+                        "type": "boolean"
+                    },
+                    "dark_mode": {
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "platform",
+                    "light_mode",
+                    "dark_mode"
+                ]
+            },
+            "ApperianceDto": {
+                "type": "object",
+                "properties": {
+                    "platforms": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PlatformDto"
+                        }
+                    }
+                },
+                "required": [
+                    "platforms"
+                ]
+            },
+            "SettingsDto": {
+                "type": "object",
+                "properties": {
+                    "language": {
+                        "type": "string"
+                    },
+                    "notification": {
+                        "$ref": "#/components/schemas/NotificationDto"
+                    },
+                    "apperiance": {
+                        "$ref": "#/components/schemas/ApperianceDto"
+                    },
+                    "widgets": {
+                        "type": "object"
+                    }
+                },
+                "required": [
+                    "language",
+                    "notification",
+                    "apperiance",
+                    "widgets"
+                ]
+            },
+            "DoorLockDTO": {
+                "type": "object",
+                "properties": {
+                    "lock": {
+                        "type": "object"
+                    }
+                },
+                "required": [
+                    "lock"
+                ]
+            },
+            "ToggleLightDeviceDTO": {
+                "type": "object",
+                "properties": {
+                    "state": {
+                        "type": "object"
+                    }
+                },
+                "required": [
+                    "state"
+                ]
+            },
+            "AddUserPlaceDTO": {
+                "type": "object",
+                "properties": {
+                    "place_id": {
+                        "type": "string",
+                        "description": "MongoId of a user-place",
+                        "example": "61e51d05d10fcc0a53b8cbd9"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Custom user-place name given by user",
+                        "example": "My flat"
+                    }
+                }
+            },
+            "UpdateUserPlaceDTO": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Custom user-place name given by user",
+                        "example": "My flat"
+                    }
+                }
+            },
+            "RoomDeviceInput": {
+                "type": "object",
+                "properties": {
+                    "device_id": {
+                        "type": "string"
+                    },
+                    "room_id": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "device_id",
+                    "room_id"
+                ]
+            },
+            "ServiceDeviceInputDTO": {
+                "type": "object",
+                "properties": {
+                    "service_id": {
+                        "type": "string"
+                    },
+                    "device_id": {
+                        "type": "string"
+                    },
+                    "place_id": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "service_id",
+                    "device_id",
+                    "place_id"
+                ]
+            },
+            "CreateRoomDTO": {
+                "type": "object",
+                "properties": {
+                    "room_type": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "parent_id": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "room_type",
+                    "parent_id"
+                ]
+            },
+            "UpdateRoomDTO": {
+                "type": "object",
+                "properties": {
+                    "room_type": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "object"
+                    },
+                    "postal_code": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "room_type",
+                    "name"
+                ]
+            },
+            "ConnectBillingDTO": {
+                "type": "object",
+                "properties": {
+                    "account_number": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "account_number",
+                    "password"
+                ]
+            },
+            "BillingDataOutputDTO": {
+                "type": "object",
+                "properties": {
+                    "first_name": {
+                        "type": "string"
+                    },
+                    "last_name": {
+                        "type": "string"
+                    },
+                    "patronimyc": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "object"
+                    }
+                },
+                "required": [
+                    "first_name",
+                    "last_name",
+                    "patronimyc",
+                    "address"
+                ]
+            }
+        }
+    },
+    "paths": {
+        "/api/v1/kafka/controller": {
+            "post": {
+                "operationId": "KafkaController_add",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Üseless for frontend"
+                ]
+            },
+            "delete": {
+                "operationId": "KafkaController_delete",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Üseless for frontend"
+                ]
+            },
+            "get": {
+                "operationId": "KafkaController_get",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Üseless for frontend"
+                ]
+            }
+        },
+        "/api/v1/kafka/controller/list": {
+            "get": {
+                "operationId": "KafkaController_getList",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Üseless for frontend"
+                ]
+            }
+        },
+        "/api/v1/kafka/controller/info": {
+            "get": {
+                "operationId": "KafkaController_getInfo",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Üseless for frontend"
+                ]
+            }
+        },
+        "/api/v1/kafka/controller/test": {
+            "get": {
+                "operationId": "KafkaController_httpTest",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Üseless for frontend"
+                ]
+            }
+        },
+        "undefined": {
+            "undefined": {
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Smarthome"
+                ]
+            }
+        },
+        "/api/v1/test/controller": {
+            "post": {
+                "operationId": "PromAlertController_post",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Üseless for frontend"
+                ]
+            },
+            "get": {
+                "operationId": "PromAlertController_get",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Üseless for frontend"
+                ]
+            },
+            "delete": {
+                "operationId": "PromAlertController_delete",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Üseless for frontend"
+                ]
+            }
+        },
+        "/api/v1/test": {
+            "post": {
+                "operationId": "TestController_post",
+                "parameters": [],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Üseless for frontend"
+                ]
+            },
+            "get": {
+                "operationId": "TestController_get",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Üseless for frontend"
+                ]
+            },
+            "delete": {
+                "operationId": "TestController_delete",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Üseless for frontend"
+                ]
+            }
+        },
+        "/api/v1/test/activity": {
+            "get": {
+                "operationId": "TestController_activity",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Üseless for frontend"
+                ]
+            }
+        },
+        "/api/v1/health": {
+            "get": {
+                "operationId": "HealthController_check",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Üseless for frontend"
+                ]
+            }
+        },
+        "/api/v1/metrics": {
+            "get": {
+                "operationId": "MetricsController_metrics",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Metrics"
+                ]
+            }
+        },
+        "/api/v1/account": {
+            "get": {
+                "operationId": "AccountController_getAccountInfo",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Account"
+                ]
+            },
+            "post": {
+                "operationId": "AccountController_create",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Account"
+                ]
+            },
+            "delete": {
+                "operationId": "AccountController_delete",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Account"
+                ]
+            }
+        },
+        "/api/v1/account/activate-code": {
+            "post": {
+                "operationId": "AccountController_activateCode",
+                "parameters": [],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Account"
+                ]
+            }
+        },
+        "/api/v1/account/resend-activation-code": {
+            "post": {
+                "operationId": "AccountController_resendActivationCode",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Account"
+                ]
+            }
+        },
+        "/api/v1/account/set-password": {
+            "post": {
+                "operationId": "AccountController_setPassword",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SetPasswordDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Account"
+                ]
+            }
+        },
+        "/api/v1/account/reset-password": {
+            "post": {
+                "operationId": "AccountController_resetPassword",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ResetPasswordRequestInputDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Account"
+                ]
+            }
+        },
+        "/api/v1/settings": {
+            "get": {
+                "operationId": "SettingsController_getSettings",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Settings"
+                ]
+            },
+            "put": {
+                "operationId": "SettingsController_updateSettings",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SettingsDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Settings"
+                ]
+            }
+        },
+        "/api/v1/activityTracker/{period}/{limit}": {
+            "get": {
+                "operationId": "ActivityTrackerController_listActivityNotes",
+                "parameters": [
+                    {
+                        "name": "period",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Activity tracker"
+                ]
+            }
+        },
+        "/api/v1/doorlock": {
+            "post": {
+                "operationId": "DoorLockController_doorLock",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DoorLockDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Smarthome"
+                ]
+            }
+        },
+        "/api/v1/profile": {
+            "get": {
+                "operationId": "ProfileController_readUserProfile",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "operationId": "ProfileController_deleteUserProfile",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "post": {
+                "operationId": "ProfileController_setName",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/profile/set-account-number": {
+            "put": {
+                "operationId": "ProfileController_setAccountNumber",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/profile/user-data": {
+            "get": {
+                "operationId": "ProfileController_readUserData",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "put": {
+                "operationId": "ProfileController_updateUserData",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/profile/address": {
+            "put": {
+                "operationId": "ProfileController_updateAddress",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/profile/contact": {
+            "put": {
+                "operationId": "ProfileController_updateContact",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/profile/set-firebase-token": {
+            "post": {
+                "operationId": "ProfileController_setFirebaseToken",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/profile/balance": {
+            "put": {
+                "operationId": "ProfileController_increaseBalance",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/profile/service": {
+            "post": {
+                "operationId": "UserServiceController_addService",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile",
+                    "User services"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "get": {
+                "operationId": "UserServiceController_listServices",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile",
+                    "User services"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/profile/place/{place_id}/service/{service_id}": {
+            "delete": {
+                "operationId": "UserServiceController_unsubscribeFromService",
+                "parameters": [
+                    {
+                        "name": "service_id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "place_id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile",
+                    "User services"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "get": {
+                "operationId": "UserServiceController_getService",
+                "parameters": [
+                    {
+                        "name": "service_id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "place_id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile",
+                    "User services"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/profile/place/{place_id}/service": {
+            "get": {
+                "operationId": "UserServiceController_listServicesOfPlace",
+                "parameters": [
+                    {
+                        "name": "place_id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile",
+                    "User services"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/providable-service/list/{type}": {
+            "get": {
+                "operationId": "ProvidableServiceController_listProvidableService",
+                "parameters": [
+                    {
+                        "name": "type",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Services",
+                    "User services"
+                ]
+            }
+        },
+        "/api/v1/light-device/toggle": {
+            "post": {
+                "operationId": "LightDeviceController_toggleLightDevice",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ToggleLightDeviceDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Smarthome"
+                ]
+            }
+        },
+        "/api/v1/light-device/state": {
+            "get": {
+                "operationId": "LightDeviceController_getState",
+                "parameters": [
+                    {
+                        "name": "device_id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Smarthome"
+                ]
+            }
+        },
+        "/api/v1/user-place": {
+            "post": {
+                "operationId": "UserPlaceController_addUserPlace",
+                "summary": "Add user place",
+                "description": "\n    Adds some new place to profile with status: \"pending\";\n  ",
+                "externalDocs": {
+                    "url": "https://www.tomorrowtides.com/api-call-example.html",
+                    "description": "Api call example"
+                },
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddUserPlaceDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successfully added",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "type": "Success",
+                                        "status": 201,
+                                        "message": "Created",
+                                        "data": {}
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Flat was not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "type": "Client Error",
+                                        "status": 404,
+                                        "message": "Not Found",
+                                        "description": "Flat not found",
+                                        "data": {}
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "User already has this place added",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "type": "Client Error",
+                                        "status": 409,
+                                        "message": "Conflict",
+                                        "description": "User has this place already",
+                                        "data": {}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "User places"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "get": {
+                "operationId": "UserPlaceController_listUserPlaces",
+                "summary": "List all user-places",
+                "description": "Find all user-places owned by ine user by user-id",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "type": "Success",
+                                        "status": 200,
+                                        "message": "OK",
+                                        "data": [
+                                            {
+                                                "place_id": "a58aca614130002ddce172fb",
+                                                "status": "confirmed",
+                                                "name": "My gorgeous flat",
+                                                "address": "Flat 12;Floor 3;Section 5;Brandhouse (building 119);Savushkina 42;Saint-Petersburg;Saint-Petersburg;Russia"
+                                            },
+                                            {
+                                                "place_id": "e68da76dcbe9baabb55aaee9",
+                                                "status": "pending",
+                                                "name": "My second flat",
+                                                "address": "Flat 12;Floor 3;Section 5;Brandhouse (building 119);Savushkina 42;Saint-Petersburg;Saint-Petersburg;Russia"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "User places"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/user-place/{place_id}": {
+            "get": {
+                "operationId": "UserPlaceController_readUserPlace",
+                "summary": "Read place",
+                "description": "\n    Reads information of some concrete user place\n  ",
+                "parameters": [
+                    {
+                        "name": "place_id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully returned",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "place_id": "bcd36fd2f5b3d53afbfb18af",
+                                        "status": "confirmed",
+                                        "name": "My gorgeous flat",
+                                        "address": "Flat 12;Floor 3;Section 5;Brandhouse (building 119);Savushkina 42;Saint-Petersburg;Saint-Petersburg;Russia"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User hasn't got such place",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "type": "Client Error",
+                                        "status": 404,
+                                        "message": "Not Found",
+                                        "description": "User doesn't have this place",
+                                        "data": {}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "User places"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "operationId": "UserPlaceController_removeUserPlace",
+                "summary": "Removes place",
+                "description": "\n    Removes some user place by id\n  ",
+                "parameters": [
+                    {
+                        "name": "place_id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "Successfully deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "type": "Success",
+                                        "status": 204,
+                                        "message": "No Content",
+                                        "data": {}
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User hasn't got such place",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "type": "Client Error",
+                                        "status": 404,
+                                        "message": "Not Found",
+                                        "description": "User doesn't have this place",
+                                        "data": {}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "User places"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/user-place/{place_id}/": {
+            "put": {
+                "operationId": "UserPlaceController_updateUserPlace",
+                "summary": "Updates user-place",
+                "description": "Find one and update user-place",
+                "parameters": [
+                    {
+                        "name": "place_id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateUserPlaceDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "Successfully deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "type": "Success",
+                                        "status": 204,
+                                        "message": "No Content",
+                                        "data": {}
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User hasn't got such place",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "type": "Client Error",
+                                        "status": 404,
+                                        "message": "Not Found",
+                                        "description": "User doesn't have this place",
+                                        "data": {}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "User places"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1//profile/device": {
+            "post": {
+                "operationId": "UserDeviceController_addDeviceToRoom",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RoomDeviceInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Added"
+                    },
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "No access to device",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "description": "User has no access to this device"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Room not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "description": "Place not found"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile",
+                    "User devices"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "operationId": "UserDeviceController_removeDeviceFromRoom",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RoomDeviceInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Removed"
+                    },
+                    "403": {
+                        "description": "No access to place",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "description": "User has no access to this place"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Room not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "description": "Place not found"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile",
+                    "User devices"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1//profile/device/by/room/{room_id}": {
+            "get": {
+                "operationId": "UserDeviceController_getDevicesInRoom",
+                "parameters": [
+                    {
+                        "name": "room_id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of devices",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "No access to place",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "description": "User doesn't have this place"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile",
+                    "User devices"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1//profile/device/to/service": {
+            "post": {
+                "operationId": "UserDeviceController_addDeviceToService",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ServiceDeviceInputDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Added"
+                    },
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Trying to work with service that was not implemented",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "description": "Not supported service type."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User has no service",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "description": "User is not subscribed to this service"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Device is already connected to this service",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "description": "This device is already connected to this service."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile",
+                    "User devices"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1//profile/device/of/place/{place_id}/of/service/{service_id}": {
+            "get": {
+                "operationId": "UserDeviceController_listDevicesOfService",
+                "parameters": [
+                    {
+                        "name": "service_id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "place_id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of cameras",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "No access to place",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "description": "User has no access to this place"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile",
+                    "User devices"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1//profile/device/from/service": {
+            "delete": {
+                "operationId": "UserDeviceController_removeDeviceFromService",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ServiceDeviceInputDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Removed"
+                    },
+                    "404": {
+                        "description": "User has no service",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "description": "User is not subscribed to this service"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile",
+                    "User devices"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1//place/{place_id}/device/{device_category}": {
+            "get": {
+                "operationId": "UserDeviceController_getAvailableDevicesByCategory",
+                "parameters": [
+                    {
+                        "name": "place_id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of device ids available at this place",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "array"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile",
+                    "User devices"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1//profile/place/{place_id}/service/devices/{device_category}": {
+            "get": {
+                "operationId": "UserDeviceController_getConnectedDevices",
+                "parameters": [
+                    {
+                        "name": "place_id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "device_category",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of cameras",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Profile",
+                    "User devices"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/room": {
+            "post": {
+                "operationId": "RoomCRUDController_create",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateRoomDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Room"
+                ]
+            }
+        },
+        "/api/v1/room/by/place/{parent_id}": {
+            "get": {
+                "operationId": "RoomCRUDController_listPlaceRooms",
+                "parameters": [
+                    {
+                        "name": "parent_id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Room"
+                ]
+            }
+        },
+        "/api/v1/room/{id}": {
+            "put": {
+                "operationId": "RoomCRUDController_update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateRoomDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Room"
+                ]
+            },
+            "delete": {
+                "operationId": "RoomCRUDController_delete",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Room"
+                ]
+            }
+        },
+        "/api/v1/camera/by/place/{place_id}": {
+            "get": {
+                "operationId": "CameraController_listByPlace",
+                "parameters": [
+                    {
+                        "name": "place_id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Camera"
+                ]
+            }
+        },
+        "/api/v1/camera": {
+            "get": {
+                "operationId": "CameraController_list",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Camera"
+                ]
+            }
+        },
+        "/api/v1/device/{id}": {
+            "get": {
+                "operationId": "DeviceController_readDevice",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Device"
+                ]
+            }
+        },
+        "/api/v1/device/list/{type}": {
+            "get": {
+                "operationId": "DeviceController_listDevice",
+                "parameters": [
+                    {
+                        "name": "type",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Device"
+                ]
+            }
+        },
+        "/api/v1/intercom/by/place/{place_id}": {
+            "get": {
+                "operationId": "IntercomController_listByPlace",
+                "parameters": [
+                    {
+                        "name": "place_id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Intercom"
+                ]
+            }
+        },
+        "/api/v1/intercom": {
+            "get": {
+                "operationId": "IntercomController_list",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Intercom"
+                ]
+            }
+        },
+        "/api/v1/intercom/lock-and-unlock-door": {
+            "post": {
+                "operationId": "IntercomController_lockAndUnlockDoor",
+                "parameters": [],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Intercom"
+                ]
+            }
+        },
+        "/api/v1/intercom/cancel-intercom-call": {
+            "delete": {
+                "operationId": "IntercomController_cancelIntercomCall",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Intercom"
+                ]
+            }
+        },
+        "/api/v1/billing": {
+            "post": {
+                "operationId": "BillingController_connectBillingAccount",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ConnectBillingDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Credentials are right, everything is right, returning billing system data back",
+                        "schema": {
+                            "example": {
+                                "first_name": "Иосиф",
+                                "last_name": "Пригожин",
+                                "patronimyc": "Иванович",
+                                "address": {
+                                    "city": "Санкт-Петербург",
+                                    "street": "Невский пр-кт",
+                                    "house": "1",
+                                    "building": null,
+                                    "flat": "1"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BillingDataOutputDTO"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad account number",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "description": "Bad account number"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Bad billing credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "description": "Bad billing credentials"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Billing"
+                ],
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        }
+    }
+    
+}
