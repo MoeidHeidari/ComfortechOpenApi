@@ -7,10 +7,10 @@
       "email": "apiteam@swagger.io"
     },
     "license": {
-        "name": "Apache 2.0",
-        "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version": "1.0"
+    "version": "1.1"
   },
   "externalDocs": {
     "description": "Find out more about Swagger",
@@ -453,12 +453,6 @@
         },
         "responses": {
           "200": { "description": "If success" },
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": { "schema": { "type": "object" } }
-            }
-          },
           "500": { "description": "If failed" }
         },
         "tags": ["Smarthome"]
@@ -469,7 +463,6 @@
         "operationId": "ProfileController_readUserProfile",
         "summary": "Reads the user profile",
         "description": "Get the user profile info",
-        "requestBody": { "$ref": "#/components/schemas/" },
         "parameters": [],
         "responses": {
           "200": {
@@ -477,12 +470,24 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Success",
-                    "status": 200,
-                    "message": "OK",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "function",
+                          "$ref": "#/components/schemas/UserProfileDTO"
+                        },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": { "type": "string", "example": "OK" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -527,12 +532,6 @@
         "description": "Removes the user profile info",
         "parameters": [],
         "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": { "schema": { "type": "object" } }
-            }
-          },
           "204": {
             "description": "Successfully deleted",
             "content": {
@@ -585,8 +584,8 @@
       },
       "post": {
         "operationId": "ProfileController_setName",
-        "summary": "Change user profile info",
-        "description": "Edit the user profile name lastname and patronimic",
+        "summary": "Create user profile ",
+        "description": "Adds the user profile name lastname and patronimic",
         "requestBody": {
           "required": true,
           "content": {
@@ -674,7 +673,7 @@
                     "status": 200,
                     "message": "OK",
                     "description": "The request has succeeded",
-                    "data": {}
+                    "data": null
                   }
                 }
               }
@@ -717,7 +716,7 @@
                     "type": "Success",
                     "status": 200,
                     "message": "OK",
-                    "user_data": {
+                    "data": {
                       "first_name": "Alexander",
                       "last_name": "Evsikov"
                     }
@@ -726,7 +725,21 @@
               }
             }
           },
-          "404": { "description": "" },
+          "404": {
+            "description": "User was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "type": "Client Error",
+                    "status": 404,
+                    "message": "Not Found",
+                    "data": {}
+                  }
+                }
+              }
+            }
+          },
           "500": {
             "description": "Error while service was searching user in database ",
             "content": {
@@ -913,12 +926,6 @@
         },
         "responses": {
           "200": { "description": "Updated successfully" },
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": { "schema": { "type": "object" } }
-            }
-          },
           "404": { "description": "User representation not found" }
         },
         "tags": ["Profile"],
@@ -979,7 +986,8 @@
     "/api/v1/profile/service": {
       "post": {
         "operationId": "UserServiceController_addService",
-        "summary": "Subscribes user to service",
+        "summary": "Create new room",
+        "description": "Create a new room in a user-plcae",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -995,21 +1003,23 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Success",
-                    "status": 200,
-                    "message": "OK",
-                    "description": "The request has succeeded",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": { "type": "string", "example": "OK" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
-            }
-          },
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": { "schema": { "type": "object" } }
             }
           },
           "403": {
@@ -1017,13 +1027,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Client Error",
-                    "status": 403,
-                    "message": "Forbidden",
-                    "description": "This service doesn't support this place | Not enough money",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
+                        "description": {
+                          "type": "string",
+                          "example": "This service doesn't support this place | Not enough money"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1033,13 +1051,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Client Error",
-                    "status": 404,
-                    "message": "Not Found",
-                    "description": "The server has not found anything matching the Request-URI",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 404 },
+                        "message": { "type": "string", "example": "Not Found" },
+                        "description": {
+                          "type": "string",
+                          "example": "The server has not found anything matching the Request-URI"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1058,18 +1084,24 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Success",
-                    "status": 200,
-                    "message": "OK",
-                    "description": "The request has succeeded",
-                    "data": [
-                      {
-                        "current_plan_id": "63260fdf3fea78a47ecdc79f",
-                        "service_id": "63246a30efefc192e26838cd"
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "function",
+                          "$ref": "#/components/schemas/UserServiceDTO"
+                        },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": { "type": "string", "example": "OK" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
                       }
-                    ]
-                  }
+                    }
+                  ]
                 }
               }
             }
@@ -1082,7 +1114,8 @@
     "/api/v1/profile/place/{place_id}/service/{service_id}": {
       "delete": {
         "operationId": "UserServiceController_unsubscribeFromService",
-        "summary": "Unsubscribes user from service",
+        "summary": "Unsubscribe user from service",
+        "description": "Unsubscribes user from service",
         "parameters": [
           {
             "name": "service_id",
@@ -1102,8 +1135,84 @@
           }
         ],
         "responses": {
-          "200": { "description": "Unsubscribed successfully" },
-          "304": { "description": "Was not unsubscribed" }
+          "204": {
+            "description": "Unsubscribed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 204 },
+                        "message": {
+                          "type": "string",
+                          "example": "No Content"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "The server has fulfilled the request but does not need to return an entity-body, and might want to return updated metainformation"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Was not unsubscribed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Server Error" },
+                        "status": { "type": "number", "example": 304 },
+                        "message": {
+                          "type": "string",
+                          "example": "Not Modified"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "If the client has performed a conditional GET request and access is allowed, but the document has not been modified, the server SHOULD respond with this status code"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 404 },
+                        "message": { "type": "string", "example": "Not Found" },
+                        "description": {
+                          "type": "string",
+                          "example": "User doesn't have this place"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
         },
         "tags": ["Profile", "User services"],
         "security": [{ "bearer": [] }]
@@ -1135,16 +1244,24 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Success",
-                    "status": 200,
-                    "message": "OK",
-                    "description": "The request has succeeded",
-                    "data": {
-                      "current_plan_id": "63260fdf3fea78a47ecdc79f",
-                      "service_id": "63246a30efefc192e26838cd"
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "function",
+                          "$ref": "#/components/schemas/UserServiceDTO"
+                        },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": { "type": "string", "example": "OK" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
+                      }
                     }
-                  }
+                  ]
                 }
               }
             }
@@ -1190,16 +1307,24 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Success",
-                    "status": 200,
-                    "message": "OK",
-                    "description": "The request has succeeded",
-                    "data": {
-                      "current_plan_id": "63260fdf3fea78a47ecdc79f",
-                      "service_id": "63246a30efefc192e26838cd"
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "function",
+                          "$ref": "#/components/schemas/UserServiceDTO"
+                        },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": { "type": "string", "example": "OK" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
+                      }
                     }
-                  }
+                  ]
                 }
               }
             }
@@ -1245,18 +1370,26 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Success",
-                    "status": 200,
-                    "message": "OK",
-                    "description": "The request has succeeded",
-                    "data": [
-                      {
-                        "current_plan_id": "63260fdf3fea78a47ecdc79f",
-                        "service_id": "63246a30efefc192e26838cd"
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/UserServiceDTO"
+                          }
+                        },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": { "type": "string", "example": "OK" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
                       }
-                    ]
-                  }
+                    }
+                  ]
                 }
               }
             }
@@ -1281,12 +1414,6 @@
         },
         "responses": {
           "200": { "description": "If success" },
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": { "schema": { "type": "object" } }
-            }
-          },
           "500": { "description": "If failed" }
         },
         "tags": ["Smarthome"]
@@ -1360,10 +1487,6 @@
         "operationId": "UserPlaceController_addUserPlace",
         "summary": "Add user place",
         "description": "\n    Adds some new place to profile with status: \"pending\";\n  ",
-        "externalDocs": {
-          "url": "https://www.tomorrowtides.com/api-call-example.html",
-          "description": "Api call example"
-        },
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -1379,12 +1502,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Success",
-                    "status": 201,
-                    "message": "Created",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 201 },
+                        "message": { "type": "string", "example": "Created" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has been fulfilled and resulted in a new resource being created"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1394,13 +1526,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Client Error",
-                    "status": 404,
-                    "message": "Not Found",
-                    "description": "Flat not found",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 404 },
+                        "message": { "type": "string", "example": "Not Found" },
+                        "description": {
+                          "type": "string",
+                          "example": "Flat not found"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1410,13 +1550,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Client Error",
-                    "status": 409,
-                    "message": "Conflict",
-                    "description": "User has this place already",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 409 },
+                        "message": { "type": "string", "example": "Conflict" },
+                        "description": {
+                          "type": "string",
+                          "example": "User has this place already"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1432,29 +1580,28 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Ok",
+            "description": "Result provided",
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Success",
-                    "status": 200,
-                    "message": "OK",
-                    "data": [
-                      {
-                        "place_id": "e8fdd7a1dcd5a7f3705bd30d",
-                        "status": "confirmed",
-                        "name": "My gorgeous flat",
-                        "address": "Flat 12;Floor 3;Section 5;Brandhouse (building 119);Savushkina 42;Saint-Petersburg;Saint-Petersburg;Russia"
-                      },
-                      {
-                        "place_id": "72c970edc65028cbc4e69bcb",
-                        "status": "pending",
-                        "name": "My second flat",
-                        "address": "Flat 12;Floor 3;Section 5;Brandhouse (building 119);Savushkina 42;Saint-Petersburg;Saint-Petersburg;Russia"
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "function",
+                          "$ref": "#/components/schemas/UserPlaceOutputDTO"
+                        },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": { "type": "string", "example": "OK" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
                       }
-                    ]
-                  }
+                    }
+                  ]
                 }
               }
             }
@@ -1483,12 +1630,24 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "place_id": "644fecec56682c270efee6eb",
-                    "status": "confirmed",
-                    "name": "My gorgeous flat",
-                    "address": "Flat 12;Floor 3;Section 5;Brandhouse (building 119);Savushkina 42;Saint-Petersburg;Saint-Petersburg;Russia"
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "function",
+                          "$ref": "#/components/schemas/UserPlaceOutputDTO"
+                        },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": { "type": "string", "example": "OK" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1498,13 +1657,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Client Error",
-                    "status": 404,
-                    "message": "Not Found",
-                    "description": "User doesn't have this place",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 404 },
+                        "message": { "type": "string", "example": "Not Found" },
+                        "description": {
+                          "type": "string",
+                          "example": "The server has not found anything matching the Request-URI"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1526,23 +1693,29 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": { "schema": { "type": "object" } }
-            }
-          },
           "204": {
             "description": "Successfully deleted",
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Success",
-                    "status": 204,
-                    "message": "No Content",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 204 },
+                        "message": {
+                          "type": "string",
+                          "example": "No Content"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "The server has fulfilled the request but does not need to return an entity-body, and might want to return updated metainformation"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1552,13 +1725,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Client Error",
-                    "status": 404,
-                    "message": "Not Found",
-                    "description": "User doesn't have this place",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 404 },
+                        "message": { "type": "string", "example": "Not Found" },
+                        "description": {
+                          "type": "string",
+                          "example": "User doesn't have this place"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1571,8 +1752,8 @@
     "/api/v1/user-place/{place_id}/": {
       "put": {
         "operationId": "UserPlaceController_updateUserPlace",
-        "summary": "Updates user-place",
-        "description": "Find one and update user-place",
+        "summary": "Updates name of place",
+        "description": "\n    Updates user place name by id\n  ",
         "parameters": [
           {
             "name": "place_id",
@@ -1590,23 +1771,29 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": { "schema": { "type": "object" } }
-            }
-          },
           "204": {
             "description": "Successfully deleted",
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Success",
-                    "status": 204,
-                    "message": "No Content",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 204 },
+                        "message": {
+                          "type": "string",
+                          "example": "No Content"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "The server has fulfilled the request but does not need to return an entity-body, and might want to return updated metainformation"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1616,13 +1803,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Client Error",
-                    "status": 404,
-                    "message": "Not Found",
-                    "description": "User doesn't have this place",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 404 },
+                        "message": { "type": "string", "example": "Not Found" },
+                        "description": {
+                          "type": "string",
+                          "example": "User doesn't have this place"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1646,19 +1841,49 @@
           }
         },
         "responses": {
-          "201": { "description": "Added" },
+          "201": {
+            "description": "Added",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 201 },
+                        "message": { "type": "string", "example": "Created" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has been fulfilled and resulted in a new resource being created"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
           "403": {
             "description": "No access to device or place",
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
                     {
-                      "example": {
-                        "description": "User has no access to this device"
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
+                        "description": {
+                          "type": "string",
+                          "example": "User has no access to this device | Place not found"
+                        }
                       }
-                    },
-                    { "example": { "description": "Place not found" } }
+                    }
                   ]
                 }
               }
@@ -1668,7 +1893,23 @@
             "description": "Room not found",
             "content": {
               "application/json": {
-                "schema": { "example": { "description": "Place not found" } }
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 404 },
+                        "message": { "type": "string", "example": "Not Found" },
+                        "description": {
+                          "type": "string",
+                          "example": "Place not found"
+                        }
+                      }
+                    }
+                  ]
+                }
               }
             }
           }
@@ -1689,14 +1930,29 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "Removed, returns 204 instead of 200!!!",
+          "204": {
+            "description": "Successfully deleted",
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "description": "The server has fulfilled the request but does not need to return an entity-body, and might want to return updated metainformation"
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 204 },
+                        "message": {
+                          "type": "string",
+                          "example": "No Content"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "The server has fulfilled the request but does not need to return an entity-body, and might want to return updated metainformation"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1706,9 +1962,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "description": "User has no access to this place | Place not found"
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
+                        "description": {
+                          "type": "string",
+                          "example": "User has no access to this device | Place not found"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1737,8 +2005,26 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": { "$ref": "#/components/schemas/" }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/GetDeviceOutputDTO"
+                          }
+                        },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": { "type": "string", "example": "OK" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1748,7 +2034,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": { "description": "User doesn't have this place" }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
+                        "description": {
+                          "type": "string",
+                          "example": "User doesn't have this place"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1772,13 +2072,53 @@
           }
         },
         "responses": {
-          "201": { "description": "Added" },
+          "201": {
+            "description": "Added",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 201 },
+                        "message": { "type": "string", "example": "Created" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has been fulfilled and resulted in a new resource being created"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
           "400": {
             "description": "Trying to work with service that was not implemented",
             "content": {
               "application/json": {
                 "schema": {
-                  "example": { "description": "Not supported service type." }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 400 },
+                        "message": {
+                          "type": "string",
+                          "example": "Bad Request"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "Not supported service type."
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1788,9 +2128,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "description": "User is not subscribed to this service | Device not found"
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 404 },
+                        "message": { "type": "string", "example": "Not Found" },
+                        "description": {
+                          "type": "string",
+                          "example": "User is not subscribed to this service | Device not found"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1800,9 +2152,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "description": "This device is already connected to this service."
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 409 },
+                        "message": { "type": "string", "example": "Conflict" },
+                        "description": {
+                          "type": "string",
+                          "example": "This device is already connected to this service."
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1838,10 +2202,33 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    { "$ref": "#/components/schemas/GetCameraOutputDTO" },
-                    { "$ref": "#/components/schemas/GetIntercomOutputDTO" },
-                    { "$ref": "#/components/schemas/GetDeviceOutputDTO" }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "oneOf": [
+                            {
+                              "$ref": "#/components/schemas/GetCameraOutputDTO"
+                            },
+                            {
+                              "$ref": "#/components/schemas/GetIntercomOutputDTO"
+                            },
+                            {
+                              "$ref": "#/components/schemas/GetDeviceOutputDTO"
+                            }
+                          ]
+                        },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": { "type": "string", "example": "OK" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
+                      }
+                    }
                   ]
                 }
               }
@@ -1852,9 +2239,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "description": "User has no access to this place"
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
+                        "description": {
+                          "type": "string",
+                          "example": "User has no access to this place"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1878,21 +2277,53 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "",
+          "204": {
+            "description": "Successfully deleted",
             "content": {
-              "application/json": { "schema": { "type": "object" } }
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 204 },
+                        "message": {
+                          "type": "string",
+                          "example": "No Content"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "The server has fulfilled the request but does not need to return an entity-body, and might want to return updated metainformation"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
             }
           },
-          "204": { "description": "Removed, returns 204 instead of 200!!!" },
           "404": {
             "description": "User has no service or Device was not connected",
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "description": "User is not subscribed to this service | This device is not connected to this service."
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 404 },
+                        "message": { "type": "string", "example": "Not Found" },
+                        "description": {
+                          "type": "string",
+                          "example": "User is not subscribed to this service | This device is not connected to this service."
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1928,10 +2359,51 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": [
-                    "63230b08029aa7cc70961e0b",
-                    "63230b08029aa7cc70961e0c",
-                    "63230b08029aa7cc70961e0d"
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "example": [
+                            "63230b08029aa7cc70961e0b",
+                            "63230b08029aa7cc70961e0c",
+                            "63230b08029aa7cc70961e0d"
+                          ]
+                        },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": { "type": "string", "example": "OK" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No access to place",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
+                        "description": {
+                          "type": "string",
+                          "example": "User has no access to this place"
+                        }
+                      }
+                    }
                   ]
                 }
               }
@@ -1969,10 +2441,57 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    { "$ref": "#/components/schemas/GetCameraOutputDTO" },
-                    { "$ref": "#/components/schemas/GetIntercomOutputDTO" },
-                    { "$ref": "#/components/schemas/GetDeviceOutputDTO" }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "oneOf": [
+                            {
+                              "$ref": "#/components/schemas/GetCameraOutputDTO"
+                            },
+                            {
+                              "$ref": "#/components/schemas/GetIntercomOutputDTO"
+                            },
+                            {
+                              "$ref": "#/components/schemas/GetDeviceOutputDTO"
+                            }
+                          ]
+                        },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": { "type": "string", "example": "OK" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No access to place",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
+                        "description": {
+                          "type": "string",
+                          "example": "User has no access to this place"
+                        }
+                      }
+                    }
                   ]
                 }
               }
@@ -2003,13 +2522,24 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Success",
-                    "status": 201,
-                    "message": "Created",
-                    "description": "The request has been fulfilled and resulted in a new resource being created",
-                    "data": { "id": "632202420bee25ae6a1d6ad6" }
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "example": { "id": "632202420bee25ae6a1d6ad6" }
+                        },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 201 },
+                        "message": { "type": "string", "example": "Created" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has been fulfilled and resulted in a new resource being created"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -2019,13 +2549,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Client Error",
-                    "status": 403,
-                    "message": "Forbidden",
-                    "description": "User doesn't have this place",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
+                        "description": {
+                          "type": "string",
+                          "example": "User doesn't have this place"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -2035,13 +2573,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Client Error",
-                    "status": 409,
-                    "message": "Conflict",
-                    "description": "User has this place already",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 409 },
+                        "message": { "type": "string", "example": "Conflict" },
+                        "description": {
+                          "type": "string",
+                          "example": "User has this place already"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -2051,12 +2597,24 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Server Error",
-                    "status": 500,
-                    "message": "Internal Server Error",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Server Error" },
+                        "status": { "type": "number", "example": 500 },
+                        "message": {
+                          "type": "string",
+                          "example": "Internal Server Error"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "The server encountered an unexpected condition which prevented it from fulfilling the request"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -2086,32 +2644,26 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Success",
-                    "status": 200,
-                    "message": "OK",
-                    "description": "The request has succeeded",
-                    "data": [
-                      {
-                        "id": "62e26c6c793c6e6c3df8433b",
-                        "name": "hotdog and baloone",
-                        "parent_id": "61e51d05d10fcc0a53b8cbd9",
-                        "room_type": "hall"
-                      },
-                      {
-                        "id": "62e29ca1fac2087071db3c86",
-                        "name": "poopenfarten",
-                        "parent_id": "61e51d05d10fcc0a53b8cbd9",
-                        "room_type": "toilet"
-                      },
-                      {
-                        "id": "62f2aeb47c68276740c01462",
-                        "name": "fjdj",
-                        "parent_id": "61e51d05d10fcc0a53b8cbd9",
-                        "room_type": "kitchen"
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/GetRoomOutputDTO"
+                          }
+                        },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": { "type": "string", "example": "OK" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
                       }
-                    ]
-                  }
+                    }
+                  ]
                 }
               }
             }
@@ -2121,13 +2673,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Client Error",
-                    "status": 403,
-                    "message": "Forbidden",
-                    "description": "User doesn't have this place",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
+                        "description": {
+                          "type": "string",
+                          "example": "User doesn't have this place"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -2137,12 +2697,24 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Server Error",
-                    "status": 500,
-                    "message": "Internal Server Error",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Server Error" },
+                        "status": { "type": "number", "example": 500 },
+                        "message": {
+                          "type": "string",
+                          "example": "Internal Server Error"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "The server encountered an unexpected condition which prevented it from fulfilling the request"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -2180,13 +2752,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Success",
-                    "status": 200,
-                    "message": "OK",
-                    "description": "The request has succeeded",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": { "type": "string", "example": "OK" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -2196,13 +2776,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Client Error",
-                    "status": 403,
-                    "message": "Forbidden",
-                    "description": "User doesn't have this place",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
+                        "description": {
+                          "type": "string",
+                          "example": "User doesn't have this place"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -2212,13 +2800,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Client Error",
-                    "status": 404,
-                    "message": "Not Found",
-                    "description": "Place not found",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 404 },
+                        "message": { "type": "string", "example": "Not Found" },
+                        "description": {
+                          "type": "string",
+                          "example": "Place not found"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -2228,12 +2824,24 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Server Error",
-                    "status": 500,
-                    "message": "Internal Server Error",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Server Error" },
+                        "status": { "type": "number", "example": 500 },
+                        "message": {
+                          "type": "string",
+                          "example": "Internal Server Error"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "The server encountered an unexpected condition which prevented it from fulfilling the request"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -2256,12 +2864,6 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": { "schema": { "type": "object" } }
-            }
-          },
           "204": {
             "description": "Successfully deleted",
             "content": {
@@ -2282,29 +2884,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Client Error",
-                    "status": 403,
-                    "message": "Forbidden",
-                    "description": "User doesn't have this place",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
+                        "description": {
+                          "type": "string",
+                          "example": "User doesn't have this place"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
           },
           "404": {
-            "description": "User not found",
+            "description": "Place not found",
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Client Error",
-                    "status": 404,
-                    "message": "Not Found",
-                    "description": "User doesn't have this place",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 404 },
+                        "message": { "type": "string", "example": "Not Found" },
+                        "description": {
+                          "type": "string",
+                          "example": "Place not found"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -2314,12 +2932,24 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Server Error",
-                    "status": 500,
-                    "message": "Internal Server Error",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Server Error" },
+                        "status": { "type": "number", "example": 500 },
+                        "message": {
+                          "type": "string",
+                          "example": "Internal Server Error"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "The server encountered an unexpected condition which prevented it from fulfilling the request"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -2344,12 +2974,7 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": { "schema": { "type": "object" } }
-            }
-          },
+          "200": { "description": "" },
           "403": {
             "description": "user does not have access to this place",
             "content": {
@@ -2380,14 +3005,7 @@
         "summary": "lists all available cameras",
         "deprecated": true,
         "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": { "schema": { "type": "object" } }
-            }
-          }
-        },
+        "responses": { "200": { "description": "" } },
         "tags": ["Camera"]
       }
     },
@@ -2456,14 +3074,7 @@
             "schema": { "type": "string" }
           }
         ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": { "schema": { "type": "object" } }
-            }
-          }
-        },
+        "responses": { "200": { "description": "" } },
         "tags": ["Intercom"]
       }
     },
@@ -2473,14 +3084,7 @@
         "summary": "llists available intercoms",
         "deprecated": true,
         "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": { "schema": { "type": "object" } }
-            }
-          }
-        },
+        "responses": { "200": { "description": "" } },
         "tags": ["Intercom"]
       }
     },
@@ -2599,24 +3203,24 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Success",
-                    "status": 200,
-                    "message": "OK",
-                    "data": [
-                      {
-                        "id": "/*service identifier*/",
-                        "title": "name of service",
-                        "place": "/*place identifier*/",
-                        "status": "disabled|active",
-                        "type": "intercom|camera|smart_home|utilities|internet",
-                        "full_description": "long text about service",
-                        "short_description": "short one",
-                        "necessary_info": { "key": "value" },
-                        "settings": { "*": "*" }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "function",
+                          "$ref": "#/components/schemas/GetServicesOutputDTO"
+                        },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": { "type": "string", "example": "OK" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
                       }
-                    ]
-                  }
+                    }
+                  ]
                 }
               }
             }
@@ -2644,24 +3248,24 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Success",
-                    "status": 200,
-                    "message": "OK",
-                    "data": [
-                      {
-                        "id": "/*service identifier*/",
-                        "title": "name of service",
-                        "place": "/*place identifier*/",
-                        "status": "disabled|active",
-                        "type": "intercom|camera|smart_home|utilities|internet",
-                        "full_description": "long text about service",
-                        "short_description": "short one",
-                        "necessary_info": { "key": "value" },
-                        "settings": { "*": "*" }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "function",
+                          "$ref": "#/components/schemas/GetServicesOutputDTO"
+                        },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": { "type": "string", "example": "OK" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
                       }
-                    ]
-                  }
+                    }
+                  ]
                 }
               }
             }
@@ -2849,37 +3453,98 @@
         },
         "required": ["lock"]
       },
-      "SetNameDTO": {
+      "UserServiceDTO": {
         "type": "object",
         "properties": {
-          "first_name": {
+          "service_id": {
             "type": "string",
-            "description": "Firstname of user",
-            "example": "Alexander"
+            "description": "id of a service",
+            "example": "63246a30efefc192e26838cd"
           },
-          "last_name": {
+          "current_plan_id": {
             "type": "string",
-            "description": "lastname of user",
-            "example": "Evsikov"
+            "description": "plan id",
+            "example": "63246a30efefc192e26dd801"
           },
-          "patronymic": {
-            "type": "string",
-            "description": "Patronimic of user",
-            "example": "Olegovich"
+          "devices": {
+            "description": "connected devices",
+            "example": ["632469f3efefc192e26838cc", "632469f3efefc192e26838cd"],
+            "type": "array",
+            "items": { "type": "string" }
           }
         },
-        "required": ["first_name"]
+        "required": ["service_id", "current_plan_id"]
       },
-      "SetAccountNumberDTO": {
+      "UserPlaceOutputDTO": {
         "type": "object",
         "properties": {
-          "account_number": {
+          "place_id": {
             "type": "string",
-            "description": "The account number",
-            "example": "f03e0837-4841-4962-be11-9391a224da5d"
+            "description": "MongoId of a user-place",
+            "example": "61e51d05d10fcc0a53b8cbd9"
+          },
+          "status": {
+            "enum": ["demo", "pending", "rejected", "confirmed"],
+            "type": "string",
+            "description": "User-place confirmation status",
+            "example": "accepted"
+          },
+          "name": {
+            "type": "string",
+            "description": "Custom name of a place given by user.",
+            "example": "My wonderfull flat"
+          },
+          "address": {
+            "type": "string",
+            "description": "Address string divided into parts eith ; sign.",
+            "example": "Flat 12, Floor 3, Building 4, ..."
+          },
+          "registered_services": {
+            "$ref": "#/components/schemas/UserServiceDTO"
           }
         },
-        "required": ["account_number"]
+        "required": ["registered_services"]
+      },
+      "UpdateContactDTO": {
+        "type": "object",
+        "properties": {
+          "contact_type": {
+            "type": "object",
+            "description": "type of contact (\"phone_number\" | \"mobile_number\" | \"email\")",
+            "example": "email"
+          },
+          "value": {
+            "type": "string",
+            "description": "value of contact (phone number | email addres)",
+            "example": "example@email.domain"
+          },
+          "verification": {
+            "type": "object",
+            "properties": {
+              "last_verification_code": { "required": true, "type": "string" },
+              "code_creation_time": {
+                "format": "date-time",
+                "required": true,
+                "type": "string"
+              },
+              "is_sent": { "required": true, "type": "boolean" },
+              "is_verified": { "required": true, "type": "boolean" },
+              "is_expired": { "required": true, "type": "boolean" },
+              "next_try": {
+                "type": "object",
+                "properties": {
+                  "in_sec": { "required": true, "type": "number" },
+                  "available_tries_before_ban": {
+                    "required": true,
+                    "type": "number"
+                  },
+                  "is_banned": { "required": true, "type": "boolean" }
+                }
+              }
+            }
+          }
+        },
+        "required": ["contact_type", "value", "verification"]
       },
       "UserDataDTO": {
         "type": "object",
@@ -2928,6 +3593,107 @@
         },
         "required": ["first_name", "last_name", "phone", "email"]
       },
+      "UserProfileDTO": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "User profile's id",
+            "example": "6331c87caf8159f0b3cde22d"
+          },
+          "account_type": {
+            "type": "string",
+            "description": "User profile's account type",
+            "example": "user"
+          },
+          "account_id": {
+            "type": "string",
+            "description": "User account's id (from keycloak)",
+            "example": "0b04b290-b7a3-4578-b1a2-97c23ecfd20d"
+          },
+          "updated_at": {
+            "type": "string",
+            "description": "Profile updated at",
+            "example": "2022-09-26T15:28:06.814Z"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "Profile created at",
+            "example": "2022-06-26T15:28:06.814Z"
+          },
+          "subscription_method": {
+            "type": "string",
+            "description": "Subscription method",
+            "example": "by_phone_number"
+          },
+          "balance": {
+            "type": "number",
+            "description": "User's balance",
+            "example": 1000
+          },
+          "account_number": {
+            "type": "string",
+            "description": "Account number from billing system",
+            "example": null
+          },
+          "user_places": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/UserPlaceOutputDTO" }
+          },
+          "contact": { "$ref": "#/components/schemas/UpdateContactDTO" },
+          "contacts": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/UpdateContactDTO" }
+          },
+          "user_data": { "$ref": "#/components/schemas/UserDataDTO" }
+        },
+        "required": [
+          "_id",
+          "account_type",
+          "account_id",
+          "updated_at",
+          "created_at",
+          "subscription_method",
+          "balance",
+          "account_number",
+          "user_places",
+          "contact",
+          "contacts",
+          "user_data"
+        ]
+      },
+      "SetNameDTO": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "description": "Firstname of user",
+            "example": "Alexander"
+          },
+          "last_name": {
+            "type": "string",
+            "description": "lastname of user",
+            "example": "Evsikov"
+          },
+          "patronymic": {
+            "type": "string",
+            "description": "Patronimic of user",
+            "example": "Olegovich"
+          }
+        },
+        "required": ["first_name"]
+      },
+      "SetAccountNumberDTO": {
+        "type": "object",
+        "properties": {
+          "account_number": {
+            "type": "string",
+            "description": "The account number",
+            "example": "f03e0837-4841-4962-be11-9391a224da5d"
+          }
+        },
+        "required": ["account_number"]
+      },
       "UpdateAddressDTO": {
         "type": "object",
         "properties": {
@@ -2970,47 +3736,6 @@
           }
         },
         "required": ["location"]
-      },
-      "UpdateContactDTO": {
-        "type": "object",
-        "properties": {
-          "contact_type": {
-            "type": "object",
-            "description": "type of contact (\"phone_number\" | \"mobile_number\" | \"email\")",
-            "example": "email"
-          },
-          "value": {
-            "type": "string",
-            "description": "value of contact (phone number | email addres)",
-            "example": "example@email.domain"
-          },
-          "verification": {
-            "type": "object",
-            "properties": {
-              "last_verification_code": { "required": true, "type": "string" },
-              "code_creation_time": {
-                "format": "date-time",
-                "required": true,
-                "type": "string"
-              },
-              "is_sent": { "required": true, "type": "boolean" },
-              "is_verified": { "required": true, "type": "boolean" },
-              "is_expired": { "required": true, "type": "boolean" },
-              "next_try": {
-                "type": "object",
-                "properties": {
-                  "in_sec": { "required": true, "type": "number" },
-                  "available_tries_before_ban": {
-                    "required": true,
-                    "type": "number"
-                  },
-                  "is_banned": { "required": true, "type": "boolean" }
-                }
-              }
-            }
-          }
-        },
-        "required": ["contact_type", "value", "verification"]
       },
       "IncreaseBalanceDTO": {
         "type": "object",
@@ -3069,6 +3794,16 @@
             "example": "My flat"
           }
         }
+      },
+      "HttpResponse": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string" },
+          "status": { "type": "number" },
+          "message": { "type": "string" },
+          "description": { "type": "string" }
+        },
+        "required": ["type", "status", "message", "description"]
       },
       "UpdateUserPlaceDTO": {
         "type": "object",
@@ -3276,6 +4011,31 @@
         },
         "required": ["room_type"]
       },
+      "GetRoomOutputDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Mongo id of the room",
+            "example": "62e29ca1fac2087071db3c86"
+          },
+          "room_type": {
+            "type": "string",
+            "description": "Room type (hall, toilet, kitchen)",
+            "example": "toilet"
+          },
+          "name": {
+            "type": "string",
+            "description": "Custom namefor the room",
+            "example": "My favourite toilet"
+          },
+          "parent_id": {
+            "type": "string",
+            "description": "Mongo id of the flat (parent of this room)",
+            "example": "61e51d05d10fcc0a53b8cbd9"
+          }
+        }
+      },
       "UpdateRoomDTO": {
         "type": "object",
         "properties": {
@@ -3308,6 +4068,87 @@
           "address": { "type": "object" }
         },
         "required": ["first_name", "last_name", "patronimyc", "address"]
+      },
+      "GetServicesOutputDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "id of the service",
+            "example": "f0be62cd4115cd3c5fdcdbc7"
+          },
+          "title": {
+            "type": "string",
+            "description": "title of the service",
+            "example": "naughty professor"
+          },
+          "places": {
+            "description": "id of the place where service is provided",
+            "example": ["61e51d05d10fcc0a53b8cbd9", "61e51d05d10fcc0a53b8cbd8"],
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "status": {
+            "enum": ["disabled", "active"],
+            "type": "string",
+            "description": "activity status (active|desabled)",
+            "example": "active"
+          },
+          "type": {
+            "enum": [
+              "intercom",
+              "camera",
+              "smart_home",
+              "utilities",
+              "internet"
+            ],
+            "type": "string",
+            "description": "service type ",
+            "example": "intercom"
+          },
+          "full_description": {
+            "type": "string",
+            "description": "full description of the service",
+            "example": "pariatur et corporis et odit unde sed adipisci quisquam quisquam deleniti officiis iure sint voluptates sapiente quia consequatur quam quis"
+          },
+          "short_description": {
+            "type": "string",
+            "description": "short description of the service",
+            "example": "dignissimos ipsum architecto unde incidunt"
+          },
+          "necessary_info": {
+            "type": "object",
+            "description": "necessary information about the service. can be different depending on the base service",
+            "example": { "key": "value" }
+          },
+          "settings": {
+            "type": "object",
+            "description": "settings of the service. can be different depending on the type of service",
+            "example": { "*": "*" }
+          },
+          "devices": {
+            "description": "devices available at this service",
+            "example": [
+              "61e51d0dd10fcc0a53b8cbe1",
+              "61e51d0dd10fcc0a53b8cbec",
+              "61e51d0dd10fcc0a53b8cbea"
+            ],
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "places",
+          "status",
+          "type",
+          "full_description",
+          "short_description",
+          "necessary_info",
+          "settings",
+          "devices"
+        ]
       }
     }
   }
