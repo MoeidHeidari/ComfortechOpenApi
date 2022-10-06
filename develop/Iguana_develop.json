@@ -2995,19 +2995,28 @@
         "tags": ["Camera"]
       }
     },
-    "/api/v1/device": {
-      "post": {
+    "/api/v1/device/{device_id}/place/{place_id}": {
+      "get": {
         "operationId": "DeviceController_get",
         "summary": "Gets device information by its id and place id",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": { "$ref": "#/components/schemas/GetDeviceInfoInputDTO" }
-            }
+        "parameters": [
+          {
+            "name": "place_id",
+            "required": true,
+            "in": "path",
+            "description": "mongo id of the place",
+            "example": "61e51d05d10fcc0a53b8cbd9",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "device_id",
+            "required": true,
+            "in": "path",
+            "description": "mongo id of the device",
+            "example": "61e51d05d10fcc0a53b8da781",
+            "schema": { "type": "string" }
           }
-        },
+        ],
         "responses": {
           "200": {
             "description": "Device information and configs returned",
@@ -3041,12 +3050,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Client Error",
-                    "status": 404,
-                    "message": "Not Found",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 404 },
+                        "message": { "type": "string", "example": "Not Found" },
+                        "data": {},
+                        "description": {
+                          "type": "string",
+                          "example": "The server has not found anything matching the Request-URI"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -3056,12 +3074,24 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "type": "Server Error",
-                    "status": 500,
-                    "message": "Internal Server Error",
-                    "data": {}
-                  }
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "type": { "type": "string", "example": "Server Error" },
+                        "status": { "type": "number", "example": 500 },
+                        "message": {
+                          "type": "string",
+                          "example": "Internal Server Error"
+                        },
+                        "data": {},
+                        "description": {
+                          "type": "string",
+                          "example": "The server encountered an unexpected condition which prevented it from fulfilling the request"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
