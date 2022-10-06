@@ -111,20 +111,6 @@
         "tags": ["Üseless for frontend"]
       }
     },
-    "undefined": {
-      "undefined": {
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": { "schema": { "type": "string" } }
-            }
-          }
-        },
-        "tags": ["Smarthome"]
-      }
-    },
     "/api/v1/test/controller": {
       "post": {
         "operationId": "PromAlertController_post",
@@ -3009,6 +2995,81 @@
         "tags": ["Camera"]
       }
     },
+    "/api/v1/device": {
+      "post": {
+        "operationId": "DeviceController_get",
+        "summary": "Gets device information by its id and place id",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/GetDeviceInfoInputDTO" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Device information and configs returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "function",
+                          "$ref": "#/components/schemas/GetDeviceInfoOutputDTO"
+                        },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": { "type": "string", "example": "OK" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Device was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "type": "Client Error",
+                    "status": 404,
+                    "message": "Not Found",
+                    "data": {}
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while service was searching user in database ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "type": "Server Error",
+                    "status": 500,
+                    "message": "Internal Server Error",
+                    "data": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Device"]
+      }
+    },
     "/api/v1/device/{id}": {
       "get": {
         "operationId": "DeviceController_readDevice",
@@ -3328,6 +3389,48 @@
       "bearer": { "scheme": "bearer", "bearerFormat": "JWT", "type": "http" }
     },
     "schemas": {
+      "GetDeviceInfoInputDTO": {
+        "type": "object",
+        "properties": {
+          "device_id": {
+            "type": "string",
+            "description": "Id of device",
+            "example": "167d09167c08bbc540e1e0f3"
+          },
+          "place_id": {
+            "type": "string",
+            "description": "Id of device",
+            "example": "167d0916dc08abc34001ef78"
+          }
+        },
+        "required": ["device_id", "place_id"]
+      },
+      "GetDeviceInfoOutputDTO": {
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "array",
+            "description": "Information about divice {key: 'key', value:'value'}",
+            "example": [
+              { "key": "title", "value": "intercom" },
+              { "key": "type", "value": "intercom" }
+            ]
+          },
+          "config": {
+            "type": "array",
+            "description": "Divice configs {key: 'key', value:'value'}",
+            "example": [
+              { "key": "username", "value": "user" },
+              { "key": "password", "value": "AEZAKMI" },
+              { "key": "RTSPURI", "value": "RTSP_URI_value" },
+              { "key": "WSS", "value": "WSS_value" },
+              { "key": "target", "value": "target_value" },
+              { "key": "realm_value", "value": "realm_value" },
+              { "key": "SIPURI", "value": "SIP_URI_value" }
+            ]
+          }
+        }
+      },
       "": {
         "type": "object",
         "properties": {
