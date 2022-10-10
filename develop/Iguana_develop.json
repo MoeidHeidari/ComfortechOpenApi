@@ -3633,7 +3633,10 @@
             "example": "Flat 12, Floor 3, Building 4, ..."
           },
           "registered_services": {
-            "$ref": "#/components/schemas/UserServiceDTO"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserServiceDTO"
+            }
           }
         },
         "required": ["registered_services"]
