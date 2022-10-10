@@ -3069,6 +3069,30 @@
               }
             }
           },
+          "403": {
+            "description": "User does not have this device or place",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
+                        "description": {
+                          "type": "string",
+                          "example": "User has no access to this device | Place not found"
+                        },
+                        "data": {}
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
           "404": {
             "description": "Device was not found",
             "content": {
