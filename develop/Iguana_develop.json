@@ -3028,8 +3028,32 @@
                     {
                       "properties": {
                         "data": {
-                          "type": "function",
-                          "$ref": "#/components/schemas/GetDeviceInfoOutputDTO"
+                          "oneOf": [
+                            {
+                              "$ref": "#/components/schemas/GetDeviceInfoOutputDTO_Intercom"
+                            },
+                            {
+                              "$ref": "#/components/schemas/GetDeviceInfoOutputDTO_Camera"
+                            },
+                            {
+                              "$ref": "#/components/schemas/GetDeviceInfoOutputDTO_DoorLock"
+                            },
+                            {
+                              "$ref": "#/components/schemas/GetDeviceInfoOutputDTO_MotionSensor"
+                            },
+                            {
+                              "$ref": "#/components/schemas/GetDeviceInfoOutputDTO_LightDevice"
+                            },
+                            {
+                              "$ref": "#/components/schemas/GetDeviceInfoOutputDTO_ColdWaterMeter"
+                            },
+                            {
+                              "$ref": "#/components/schemas/GetDeviceInfoOutputDTO_HeatingMeter"
+                            },
+                            {
+                              "$ref": "#/components/schemas/GetDeviceInfoOutputDTO_ClimateControl"
+                            }
+                          ]
                         },
                         "type": { "type": "string", "example": "Success" },
                         "status": { "type": "number", "example": 200 },
@@ -3435,32 +3459,678 @@
         },
         "required": ["device_id", "place_id"]
       },
-      "GetDeviceInfoOutputDTO": {
+      "GetDeviceInfoOutputDTO_Intercom": {
         "type": "object",
         "properties": {
           "info": {
             "type": "array",
             "description": "Information about divice {key: 'key', value:'value'}",
             "example": [
-              { "key": "title", "value": "intercom" },
-              { "key": "type", "value": "intercom" }
+              {
+                "key": "TITLE",
+                "value": "Intersviaz"
+              },
+              {
+                "key": "CATEGORY",
+                "value": "observation"
+              },
+              {
+                "key": "TYPE",
+                "value": "intercom"
+              },
+              {
+                "key": "SUBTYPE",
+                "value": "beward_intercom"
+              },
+              {
+                "key": "CONTRIBUTER_NAME",
+                "value": "Beward"
+              },
+              {
+                "key": "DEVICE_MODEL",
+                "value": "DKS15374"
+              }
             ]
           },
           "config": {
             "type": "array",
             "description": "Divice configs {key: 'key', value:'value'}",
             "example": [
-              { "key": "username", "value": "user" },
-              { "key": "password", "value": "AEZAKMI" },
-              { "key": "RTSPURI", "value": "RTSP_URI_value" },
-              { "key": "WSS", "value": "WSS_value" },
-              { "key": "target", "value": "target_value" },
-              { "key": "realm_value", "value": "realm_value" },
-              { "key": "SIPURI", "value": "SIP_URI_value" }
+              {
+                "key": "LOCAL_IP",
+                "value": "192.168.1.110"
+              },
+              {
+                "key": "HTTP_PORT",
+                "value": "80"
+              },
+              {
+                "key": "HTTP_USER",
+                "value": "admin"
+              },
+              {
+                "key": "HTTP_PASS",
+                "value": "admin"
+              },
+              {
+                "key": "RTSP_NAME",
+                "value": "intercom1"
+              },
+              {
+                "key": "RTSP_HOST",
+                "value": "176.53.196.41"
+              },
+              {
+                "key": "RTSP_PORT",
+                "value": "8554"
+              },
+              {
+                "key": "RTSP_USER",
+                "value": "comfortech"
+              },
+              {
+                "key": "RTSP_PASS",
+                "value": "PoI456ZxC"
+              },
+              {
+                "key": "RTSP_ENDPOINT",
+                "value": "intercom1"
+              },
+              {
+                "key": "SIP_WS_URL",
+                "value": "wss://comfortech-dev-server.comfortel.pro:8089/ws"
+              },
+              {
+                "key": "SIP_URI",
+                "value": "sip:15@comfortech-dev-server.comfortel.pro"
+              },
+              {
+                "key": "SIP_AUTHORIZATION_USER",
+                "value": "15"
+              },
+              {
+                "key": "SIP_PASSWORD",
+                "value": "nixhivsyib"
+              },
+              {
+                "key": "SIP_DISPLAY_NAME",
+                "value": "Intersviaz"
+              },
+              {
+                "key": "SIP_CALLER_ID",
+                "value": "200"
+              }
             ]
           }
         }
       },
+      "GetDeviceInfoOutputDTO_DoorLock": {
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "array",
+            "description": "Information about divice {key: 'key', value:'value'}",
+            "example": [
+              { "key": "TITLE", "value": "Door lock" },
+              { "key": "CATEGORY", "value": "smart_home" },
+              { "key": "TYPE", "value": "door_lock" },
+              { "key": "SUBTYPE", "value": "dipal_smart_lock" },
+              { "key": "EUI", "value": "3F375BFEFFE20A68" },
+              { "key": "CONTRIBUTER_NAME", "value": "Dipal" },
+              { "key": "DEVICE_MODEL", "value": "Dipal Smart Lock" },
+              { "key": "SOFTWARE_VERSION", "value": "v0.1" },
+              { "key": "PROTOCOL", "value": "zigbee" }
+            ]
+          },
+          "config": {
+            "type": "array",
+            "description": "Divice configs {key: 'key', value:'value'}",
+            "example": [
+              { "key": "ROOM_ID", "value": "6217490c15e4d085ed463dd2" },
+              { "key": "OPENING_TIME", "value": 3000 }
+            ]
+          }
+        }
+      },
+      "GetDeviceInfoOutputDTO_MotionSensor": {
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "array",
+            "description": "Information about divice {key: 'key', value:'value'}",
+            "example": [
+              { "key": "TITLE", "value": "Motion sensor" },
+              { "key": "CATEGORY", "value": "smart_home" },
+              { "key": "TYPE", "value": "motion_sensor" },
+              {
+                "key": "SUBTYPE",
+                "value": "illuminance_reading_motion_sensor"
+              },
+              { "key": "EUI", "value": "00158D00052BCEE7" },
+              { "key": "CONTRIBUTER_NAME", "value": "Xiaomi" },
+              { "key": "DEVICE_MODEL", "value": "Xiaomi Mi Motion Sensor" },
+              { "key": "PROTOCOL", "value": "zigbee" },
+              { "key": "ILLUMINANCE_VALUE", "value": 5.12 },
+              { "key": "ILLUMINANCE_TIMESTAMP", "value": 1658309131239 }
+            ]
+          },
+          "config": {
+            "type": "array",
+            "description": "Divice configs {key: 'key', value:'value'}",
+            "example": [
+              { "key": "ROOM_ID", "value": "6217490c15e4d085ed463dd2" },
+              { "key": "OPENING_TIME", "value": 3000 }
+            ]
+          }
+        }
+      },
+      "GetDeviceInfoOutputDTO_LightDevice": {
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "array",
+            "description": "Information about divice {key: 'key', value:'value'}",
+            "example": [
+              { "key": "TITLE", "value": "Light device" },
+              { "key": "CATEGORY", "value": "smart_home" },
+              { "key": "TYPE", "value": "light_device" },
+              { "key": "SUBTYPE", "value": "2_lamps_light_device" },
+              { "key": "EUI", "value": "C81F41FEFF23A460" },
+              { "key": "SWITCH_STATE_1", "value": true },
+              { "key": "SWITCH_STATE_2", "value": false }
+            ]
+          },
+          "config": {
+            "type": "array",
+            "description": "Divice configs {key: 'key', value:'value'}",
+            "example": [
+              {
+                "key": "ILLIMINANCE",
+                "value": 0.7
+              }
+            ]
+          }
+        }
+      },
+      "GetDeviceInfoOutputDTO_Camera": {
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "array",
+            "description": "Information about divice {key: 'key', value:'value'}",
+            "example": [
+              {
+                "key": "TITLE",
+                "value": "IpTronic 1"
+              },
+              {
+                "key": "CATEGORY",
+                "value": "observation"
+              },
+              {
+                "key": "TYPE",
+                "value": "surveillance"
+              },
+              {
+                "key": "SUBTYPE",
+                "value": "camera"
+              },
+              {
+                "key": "CONTRIBUTER_NAME",
+                "value": "IpTronic"
+              },
+              {
+                "key": "DEVICE_MODEL",
+                "value": "IPT-IPL72-DP(2,8-12)P"
+              }
+            ]
+          },
+          "config": {
+            "type": "array",
+            "description": "Divice configs {key: 'key', value:'value'}",
+            "example": [
+              {
+                "key": "LOCAL_IP",
+                "value": "192.168.1.111"
+              },
+              {
+                "key": "HTTP_PORT",
+                "value": "80"
+              },
+              {
+                "key": "HTTP_USER",
+                "value": "admin"
+              },
+              {
+                "key": "HTTP_PASS",
+                "value": "admin"
+              },
+              {
+                "key": "RTSP_NAME",
+                "value": "camera5"
+              },
+              {
+                "key": "RTSP_HOST",
+                "value": "176.53.196.41"
+              },
+              {
+                "key": "RTSP_PORT",
+                "value": "8554"
+              },
+              {
+                "key": "RTSP_USER",
+                "value": "comfortech"
+              },
+              {
+                "key": "RTSP_PASS",
+                "value": "PoI456ZxC"
+              },
+              {
+                "key": "RTSP_ENDPOINT",
+                "value": "camera5"
+              }
+            ]
+          }
+        }
+      },
+      "GetDeviceInfoOutputDTO_ColdWaterMeter": {
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "array",
+            "description": "Information about divice {key: 'key', value:'value'}",
+            "example": [
+              {
+                "key": "TITLE",
+                "value": "Cold water meter"
+              },
+              {
+                "key": "CATEGORY",
+                "value": "utilities"
+              },
+              {
+                "key": "TYPE",
+                "value": "simple_meter"
+              },
+              {
+                "key": "SUBTYPE",
+                "value": "cold_water_meter"
+              },
+              {
+                "key": "EUI",
+                "value": "EBEC30C8214F1B30"
+              },
+              {
+                "key": "CONTRIBUTER_NAME",
+                "value": "Dipal"
+              },
+              {
+                "key": "DEVICE_MODEL",
+                "value": "Dipal Smart Meter"
+              },
+              {
+                "key": "SOFTWARE_VERSION",
+                "value": "v0.1"
+              },
+              {
+                "key": "PROTOCOL",
+                "value": "zigbee"
+              },
+              {
+                "key": "METER_VALUE",
+                "value": "27214266"
+              },
+              {
+                "key": "METER_TIMESTAMP",
+                "value": "1665143123"
+              }
+            ]
+          },
+          "config": {
+            "type": "array",
+            "description": "Divice configs {key: 'key', value:'value'}",
+            "example": [
+              {
+                "key": "PERIODICITY",
+                "value": "monthly"
+              }
+            ]
+          }
+        }
+      },
+      "GetDeviceInfoOutputDTO_HotWaterMeter": {
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "array",
+            "description": "Information about divice {key: 'key', value:'value'}",
+            "example": [
+              {
+                "key": "TITLE",
+                "value": "Hot water meter"
+              },
+              {
+                "key": "CATEGORY",
+                "value": "utilities"
+              },
+              {
+                "key": "TYPE",
+                "value": "simple_meter"
+              },
+              {
+                "key": "SUBTYPE",
+                "value": "hot_water_meter"
+              },
+              {
+                "key": "EUI",
+                "value": "DAAA2A363713F022"
+              },
+              {
+                "key": "CONTRIBUTER_NAME",
+                "value": "Dipal"
+              },
+              {
+                "key": "DEVICE_MODEL",
+                "value": "Dipal Smart Meter"
+              },
+              {
+                "key": "SOFTWARE_VERSION",
+                "value": "v0.1"
+              },
+              {
+                "key": "PROTOCOL",
+                "value": "zigbee"
+              },
+              {
+                "key": "METER_VALUE",
+                "value": "31903149"
+              },
+              {
+                "key": "METER_TIMESTAMP",
+                "value": "1665143125"
+              }
+            ]
+          },
+          "config": {
+            "type": "array",
+            "description": "Divice configs {key: 'key', value:'value'}",
+            "example": [
+              {
+                "key": "PERIODICITY",
+                "value": "monthly"
+              }
+            ]
+          }
+        }
+      },
+      "GetDeviceInfoOutputDTO_ElectricMeter": {
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "array",
+            "description": "Information about divice {key: 'key', value:'value'}",
+            "example": [
+              {
+                "key": "TITLE",
+                "value": "Electric meter"
+              },
+              {
+                "key": "CATEGORY",
+                "value": "utilities"
+              },
+              {
+                "key": "TYPE",
+                "value": "simple_meter"
+              },
+              {
+                "key": "SUBTYPE",
+                "value": "electric_meter"
+              },
+              {
+                "key": "EUI",
+                "value": "E6E9FD273243C1BF"
+              },
+              {
+                "key": "CONTRIBUTER_NAME",
+                "value": "Dipal"
+              },
+              {
+                "key": "DEVICE_MODEL",
+                "value": "Dipal Smart Meter"
+              },
+              {
+                "key": "SOFTWARE_VERSION",
+                "value": "v0.1"
+              },
+              {
+                "key": "PROTOCOL",
+                "value": "zigbee"
+              },
+              {
+                "key": "METER_VALUE",
+                "value": "12050255"
+              },
+              {
+                "key": "METER_TIMESTAMP",
+                "value": "1665143124"
+              }
+            ]
+          },
+          "config": {
+            "type": "array",
+            "description": "Divice configs {key: 'key', value:'value'}",
+            "example": [
+              {
+                "key": "PERIODICITY",
+                "value": "monthly"
+              }
+            ]
+          }
+        }
+      },
+      "GetDeviceInfoOutputDTO_GasMeter": {
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "array",
+            "description": "Information about divice {key: 'key', value:'value'}",
+            "example": [
+              {
+                "key": "TITLE",
+                "value": "Gas meter"
+              },
+              {
+                "key": "CATEGORY",
+                "value": "utilities"
+              },
+              {
+                "key": "TYPE",
+                "value": "simple_meter"
+              },
+              {
+                "key": "SUBTYPE",
+                "value": "gas_meter"
+              },
+              {
+                "key": "EUI",
+                "value": "67657B66CCCBD358"
+              },
+              {
+                "key": "CONTRIBUTER_NAME",
+                "value": "Dipal"
+              },
+              {
+                "key": "DEVICE_MODEL",
+                "value": "Dipal Smart Meter"
+              },
+              {
+                "key": "SOFTWARE_VERSION",
+                "value": "v0.1"
+              },
+              {
+                "key": "PROTOCOL",
+                "value": "zigbee"
+              },
+              {
+                "key": "METER_VALUE",
+                "value": "25575023"
+              },
+              {
+                "key": "METER_TIMESTAMP",
+                "value": "1665143124"
+              }
+            ]
+          },
+          "config": {
+            "type": "array",
+            "description": "Divice configs {key: 'key', value:'value'}",
+            "example": [
+              {
+                "key": "PERIODICITY",
+                "value": "monthly"
+              }
+            ]
+          }
+        }
+      },
+      "GetDeviceInfoOutputDTO_HeatingMeter": {
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "array",
+            "description": "Information about divice {key: 'key', value:'value'}",
+            "example": [
+              {
+                "key": "TITLE",
+                "value": "Heating meter"
+              },
+              {
+                "key": "CATEGORY",
+                "value": "utilities"
+              },
+              {
+                "key": "TYPE",
+                "value": "simple_meter"
+              },
+              {
+                "key": "SUBTYPE",
+                "value": "heating_meter"
+              },
+              {
+                "key": "EUI",
+                "value": "C47609B3E186BAE4"
+              },
+              {
+                "key": "CONTRIBUTER_NAME",
+                "value": "Dipal"
+              },
+              {
+                "key": "DEVICE_MODEL",
+                "value": "Dipal Smart Meter"
+              },
+              {
+                "key": "SOFTWARE_VERSION",
+                "value": "v0.1"
+              },
+              {
+                "key": "PROTOCOL",
+                "value": "zigbee"
+              },
+              {
+                "key": "METER_VALUE",
+                "value": "25575023"
+              },
+              {
+                "key": "METER_TIMESTAMP",
+                "value": "1665143124"
+              }
+            ]
+          },
+          "config": {
+            "type": "array",
+            "description": "Divice configs {key: 'key', value:'value'}",
+            "example": [
+              {
+                "key": "PERIODICITY",
+                "value": "monthly"
+              }
+            ]
+          }
+        }
+      },
+      "GetDeviceInfoOutputDTO_ClimateControl": {
+        "type": "object",
+        "properties": {
+          "info": {
+            "type": "array",
+            "description": "Information about divice {key: 'key', value:'value'}",
+            "example": [
+              {
+                "key": "TITLE",
+                "value": "Climate control"
+              },
+              {
+                "key": "CATEGORY",
+                "value": "smart_home"
+              },
+              {
+                "key": "TYPE",
+                "value": "climate_control"
+              },
+              {
+                "key": "SUBTYPE",
+                "value": "humidity_temperature_pressure_control"
+              },
+              {
+                "key": "EUI",
+                "value": "00158D000411B28F"
+              },
+              {
+                "key": "CONTRIBUTER_NAME",
+                "value": "Xiaomi"
+              },
+              {
+                "key": "DEVICE_MODEL",
+                "value": "Xiaomi Mi Temperature and Humidity Sensor"
+              },
+              {
+                "key": "PROTOCOL",
+                "value": "zigbee"
+              },
+              {
+                "key": "HUMIDITY_VALUE",
+                "value": 289.36
+              },
+              {
+                "key": "HUMIDITY_TIMESTAMP",
+                "value": 1643906603943
+              },
+              {
+                "key": "TEMPERATURE_VALUE",
+                "value": 230.5
+              },
+              {
+                "key": "TEMPERATURE_TIMESTAMP",
+                "value": 1643906603940
+              },
+              {
+                "key": "PRESSURE_VALUE",
+                "value": 616.99
+              },
+              {
+                "key": "PRESSURE_TIMESTAMP",
+                "value": 1643906603949
+              }
+            ]
+          },
+          "config": {
+            "type": "array",
+            "description": "Divice configs {key: 'key', value:'value'}",
+            "example": []
+          }
+        }
+      },
+
       "": {
         "type": "object",
         "properties": {
