@@ -1904,7 +1904,7 @@
                     { "$ref": "#/components/schemas/HttpResponse" },
                     {
                       "properties": {
-                        "data": { "type": "object", "example": {} },
+                        "data": { "type": "object", "$ref": "#/components/schemas/JoinByQrCodeOutputDTO },
                         "type": { "type": "string", "example": "Success" },
                         "status": { "type": "number", "example": 200 },
                         "message": {
@@ -5588,6 +5588,18 @@
           "qr_code_id": {
             "type": "string",
             "description": "Mongo id of QR code",
+            "example": "62b331033073b331e567e44f"
+          }
+        }
+      },
+
+      "JoinByQrCodeOutputDTO":{
+        "type": "object",
+        "required": ["place_id"],
+        "properties": {
+          "place_id": {
+            "type": "string",
+            "description": "Mongo id of place",
             "example": "62b331033073b331e567e44f"
           }
         }
