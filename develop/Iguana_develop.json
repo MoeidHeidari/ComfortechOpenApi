@@ -1904,7 +1904,7 @@
                     { "$ref": "#/components/schemas/HttpResponse" },
                     {
                       "properties": {
-                        "data": { "type": "object", "$ref": "#/components/schemas/JoinByQrCodeOutputDTO },
+                        "data": { "type": "object", "$ref": "#/components/schemas/JoinByQrCodeOutputDTO" },
                         "type": { "type": "string", "example": "Success" },
                         "status": { "type": "number", "example": 200 },
                         "message": {
@@ -5593,7 +5593,7 @@
         }
       },
 
-      "JoinByQrCodeOutputDTO":{
+      "JoinByQrCodeOutputDTO": {
         "type": "object",
         "required": ["place_id"],
         "properties": {
