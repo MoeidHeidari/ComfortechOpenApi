@@ -1468,23 +1468,62 @@
         "tags": ["Smarthome"]
       }
     },
+
     "/api/v1/user-place": {
-      "post": {
-        "operationId": "UserPlaceController_addUserPlace",
-        "summary": "Add user place",
-        "description": "\n    Adds some new place to profile with status: \"pending\";\n  ",
+      "get": {
+        "operationId": "UserPlaceController_listUserPlaces",
+        "summary": "List all user-places",
+        "description": "Find all user-places by user-id where user has membership / invited / waiting for approval",
         "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Result provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/UserPlaceOutputDTO"
+                          }
+                        },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": { "type": "string", "example": "OK" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": ["User places"],
+        "security": [{ "bearer": [] }]
+      },
+      "put": {
+        "operationId": "UserPlaceController_updateUserPlace",
+        "summary": "Updates name of place",
+        "description": "Updates user place name by id",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/AddUserPlaceDTO" }
+              "schema": { "$ref": "#/components/schemas/UpdateUserPlaceDTO" }
             }
           }
         },
         "responses": {
-          "201": {
-            "description": "Successfully added",
+          "200": {
+            "description": "Successfully deleted",
             "content": {
               "application/json": {
                 "schema": {
@@ -1494,11 +1533,14 @@
                       "properties": {
                         "data": { "type": "object", "example": {} },
                         "type": { "type": "string", "example": "Success" },
-                        "status": { "type": "number", "example": 201 },
-                        "message": { "type": "string", "example": "Created" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": {
+                          "type": "string",
+                          "example": "OK"
+                        },
                         "description": {
                           "type": "string",
-                          "example": "The request has been fulfilled and resulted in a new resource being created"
+                          "example": "The request has succeeded"
                         }
                       }
                     }
@@ -1508,7 +1550,7 @@
             }
           },
           "404": {
-            "description": "Flat was not found",
+            "description": "Place not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -1522,7 +1564,7 @@
                         "message": { "type": "string", "example": "Not Found" },
                         "description": {
                           "type": "string",
-                          "example": "Flat not found"
+                          "example": "Place not found"
                         }
                       }
                     }
@@ -1531,8 +1573,8 @@
               }
             }
           },
-          "409": {
-            "description": "User already has this place added",
+          "403": {
+            "description": "User hasn't got such place",
             "content": {
               "application/json": {
                 "schema": {
@@ -1542,11 +1584,11 @@
                       "properties": {
                         "data": { "type": "object", "example": {} },
                         "type": { "type": "string", "example": "Client Error" },
-                        "status": { "type": "number", "example": 409 },
-                        "message": { "type": "string", "example": "Conflict" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
                         "description": {
                           "type": "string",
-                          "example": "User has this place already"
+                          "example": "User doesn't have membership in this place"
                         }
                       }
                     }
@@ -1559,14 +1601,21 @@
         "tags": ["User places"],
         "security": [{ "bearer": [] }]
       },
-      "get": {
-        "operationId": "UserPlaceController_listUserPlaces",
-        "summary": "List all user-places",
-        "description": "Find all user-places owned by ine user by user-id",
-        "parameters": [],
+      "delete": {
+        "operationId": "UserPlaceController_removeUserPlace",
+        "summary": "Leave userplace",
+        "description": "Removes current user from member list of the specific user-place",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/LeaveUserPlaceDTO" }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "Result provided",
+            "description": "Successfully deleted",
             "content": {
               "application/json": {
                 "schema": {
@@ -1574,16 +1623,61 @@
                     { "$ref": "#/components/schemas/HttpResponse" },
                     {
                       "properties": {
-                        "data": {
-                          "type": "function",
-                          "$ref": "#/components/schemas/UserPlaceOutputDTO"
-                        },
+                        "data": { "type": "object", "example": {} },
                         "type": { "type": "string", "example": "Success" },
                         "status": { "type": "number", "example": 200 },
                         "message": { "type": "string", "example": "OK" },
                         "description": {
                           "type": "string",
                           "example": "The request has succeeded"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Place not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 404 },
+                        "message": { "type": "string", "example": "Not Found" },
+                        "description": {
+                          "type": "string",
+                          "example": "The server has not found anything matching the Request-URI"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User hasn't got such place",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
+                        "description": {
+                          "type": "string",
+                          "example": "User doesn't have this place"
                         }
                       }
                     }
@@ -1621,7 +1715,7 @@
                     {
                       "properties": {
                         "data": {
-                          "type": "function",
+                          "type": "object",
                           "$ref": "#/components/schemas/UserPlaceOutputDTO"
                         },
                         "type": { "type": "string", "example": "Success" },
@@ -1639,7 +1733,7 @@
             }
           },
           "404": {
-            "description": "User hasn't got such place",
+            "description": "Place not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -1661,103 +1755,355 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "This place does not contain this user in member list ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
+                        "description": {
+                          "type": "string",
+                          "example": "User does not have this place"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": ["User places"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/api/v1/user-place/{place_id}/members": {
+      "get": {
+        "operationId": "UserPlaceController_readUserPlaceMembers",
+        "summary": "Lists members of a specific userplace",
+        "description": "Get parent of user and child members of user in a specific userplace",
+        "parameters": [
+          {
+            "name": "place_id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully returned list of members",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/UserPlaceMembersOutputDTO"
+                          }
+                        },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": { "type": "string", "example": "OK" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Place not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 404 },
+                        "message": { "type": "string", "example": "Not Found" },
+                        "description": {
+                          "type": "string",
+                          "example": "The server has not found anything matching the Request-URI"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "This place does not contain this user in member list ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
+                        "description": {
+                          "type": "string",
+                          "example": "User does not have this place"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": ["User places"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/api/v1/user-place/members": {
+      "post": {
+        "operationId": "UserPlaceController_MembershipRequset",
+        "summary": "Join userplace by QR code",
+        "description": "Add user to place by scanning QR code",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/JoinByQrCodeDTO" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request was sent and waiting for approval",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": {
+                          "type": "string",
+                          "example": "OK"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Place not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 404 },
+                        "message": { "type": "string", "example": "Not Found" },
+                        "description": {
+                          "type": "string",
+                          "example": "Place not found"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "User is already in this place",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 409 },
+                        "message": { "type": "string", "example": "Conflict" },
+                        "description": {
+                          "type": "string",
+                          "example": "User already has membership in this place"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": ["User places", "QR codes"],
+        "security": [{ "bearer": [] }]
+      },
+      "put": {
+        "operationId": "UserPlaceController_acceptMemberToUserplace",
+        "summary": "Accept member to userplace",
+        "description": "Change status of user in userplace to 'confirmed'",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AcceptUserPlaceMemberDTO" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": {
+                          "type": "string",
+                          "example": "OK"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Place not found or user not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 404 },
+                        "message": { "type": "string", "example": "Not Found" },
+                        "description": {
+                          "type": "string",
+                          "example": "Place not found"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User hasn't got privilege to add users into this userplace",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
+                        "description": {
+                          "type": "string",
+                          "example": "User doesn't have membership in this place"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "User is already in this place",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 409 },
+                        "message": { "type": "string", "example": "Conflict" },
+                        "description": {
+                          "type": "string",
+                          "example": "User already has membership in this place"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           }
         },
         "tags": ["User places"],
         "security": [{ "bearer": [] }]
       },
       "delete": {
-        "operationId": "UserPlaceController_removeUserPlace",
-        "summary": "Removes place",
-        "description": "\n    Removes some user place by id\n  ",
-        "parameters": [
-          {
-            "name": "place_id",
-            "required": true,
-            "in": "path",
-            "schema": { "type": "string" }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Successfully deleted",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    { "$ref": "#/components/schemas/HttpResponse" },
-                    {
-                      "properties": {
-                        "data": { "type": "object", "example": {} },
-                        "type": { "type": "string", "example": "Success" },
-                        "status": { "type": "number", "example": 204 },
-                        "message": {
-                          "type": "string",
-                          "example": "No Content"
-                        },
-                        "description": {
-                          "type": "string",
-                          "example": "The server has fulfilled the request but does not need to return an entity-body, and might want to return updated metainformation"
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "User hasn't got such place",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    { "$ref": "#/components/schemas/HttpResponse" },
-                    {
-                      "properties": {
-                        "data": { "type": "object", "example": {} },
-                        "type": { "type": "string", "example": "Client Error" },
-                        "status": { "type": "number", "example": 404 },
-                        "message": { "type": "string", "example": "Not Found" },
-                        "description": {
-                          "type": "string",
-                          "example": "User doesn't have this place"
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "tags": ["User places"],
-        "security": [{ "bearer": [] }]
-      }
-    },
-    "/api/v1/user-place/{place_id}/": {
-      "put": {
-        "operationId": "UserPlaceController_updateUserPlace",
-        "summary": "Updates name of place",
-        "description": "\n    Updates user place name by id\n  ",
-        "parameters": [
-          {
-            "name": "place_id",
-            "required": true,
-            "in": "path",
-            "schema": { "type": "string" }
-          }
-        ],
+        "operationId": "UserPlaceController_removeMember",
+        "summary": "Reject membership request / Remove user from the userplace",
+        "description": "Reject membership request / Remove user from the userplace",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/UpdateUserPlaceDTO" }
+              "schema": { "$ref": "#/components/schemas/UserplaceKickUserDTO" }
             }
           }
         },
         "responses": {
-          "204": {
+          "200": {
             "description": "Successfully deleted",
             "content": {
               "application/json": {
@@ -1768,14 +2114,11 @@
                       "properties": {
                         "data": { "type": "object", "example": {} },
                         "type": { "type": "string", "example": "Success" },
-                        "status": { "type": "number", "example": 204 },
-                        "message": {
-                          "type": "string",
-                          "example": "No Content"
-                        },
+                        "status": { "type": "number", "example": 200 },
+                        "message": { "type": "string", "example": "OK" },
                         "description": {
                           "type": "string",
-                          "example": "The server has fulfilled the request but does not need to return an entity-body, and might want to return updated metainformation"
+                          "example": "The request has succeeded"
                         }
                       }
                     }
@@ -1785,7 +2128,7 @@
             }
           },
           "404": {
-            "description": "User hasn't got such place",
+            "description": "Place not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -1797,6 +2140,30 @@
                         "type": { "type": "string", "example": "Client Error" },
                         "status": { "type": "number", "example": 404 },
                         "message": { "type": "string", "example": "Not Found" },
+                        "description": {
+                          "type": "string",
+                          "example": "The server has not found anything matching the Request-URI"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User hasn't got such place",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
                         "description": {
                           "type": "string",
                           "example": "User doesn't have this place"
@@ -1813,6 +2180,487 @@
         "security": [{ "bearer": [] }]
       }
     },
+
+    "/api/v1/user-place/{place_id}/qrcode": {
+      "get": {
+        "operationId": "UserPlaceController_getUserplaceQrCodes",
+        "summary": "Get list of user's QR codes for userplace",
+        "description": "Get list of qr codes this user generated for specific userplace",
+        "parameters": [
+          {
+            "name": "place_id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of QR codes returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/UserPlaceQrCodeOutputDTO"
+                          }
+                        },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": {
+                          "type": "string",
+                          "example": "OK"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Place not found or user not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 404 },
+                        "message": { "type": "string", "example": "Not Found" },
+                        "description": {
+                          "type": "string",
+                          "example": "Place not found"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User hasn't got privilege to generate read and remode qr codes for this userplace",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
+                        "description": {
+                          "type": "string",
+                          "example": "User doesn't have membership in this place"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": ["User places", "QR codes"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+
+    "/api/v1/user-place/qrcode": {
+      "post": {
+        "operationId": "UserPlaceController_CreateUserplaceQrCOde",
+        "summary": "Create QR code to share userplace ",
+        "description": "Create and get QR code to share userplace",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserPlaceCreateQrCodeDTO" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request was sent and waiting for approval",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "$ref": "#/components/schemas/UserPlaceQrCodeOutputDTO"
+                        },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": {
+                          "type": "string",
+                          "example": "OK"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Place not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 404 },
+                        "message": { "type": "string", "example": "Not Found" },
+                        "description": {
+                          "type": "string",
+                          "example": "Place not found"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User hasn't got privilege to generate read and remode qr codes for this userplace",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
+                        "description": {
+                          "type": "string",
+                          "example": "User doesn't have membership in this place or required privileges"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": ["User places", "QR codes"],
+        "security": [{ "bearer": [] }]
+      },
+      "delete": {
+        "operationId": "UserPlaceController_removeUserplaceQrCode",
+        "summary": "Delete QR code by qr_code_id",
+        "description": "Delete QR code for userplace by qr_code_id",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserplaceQrCodeInputDTO" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": { "type": "string", "example": "OK" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "QR code not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 404 },
+                        "message": { "type": "string", "example": "Not Found" },
+                        "description": {
+                          "type": "string",
+                          "example": "The server has not found anything matching the Request-URI"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User hasn't got privilege to generate read and remode qr codes for this userplace",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
+                        "description": {
+                          "type": "string",
+                          "example": "User doesn't have membership in this place or required privileges"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": ["User places", "QR codes"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+
+    "/api/v1/user-place/members/priveleges": {
+      "put": {
+        "operationId": "UserPlaceController_UserplaceUpdateUserPrivileges ",
+        "summary": "Change privileges for user by user_id and place_id",
+        "description": "Change privileges for specific user in specific userplace",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserplaceUpdateUserPrivilegesDTO" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "example": {}
+                        },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": {
+                          "type": "string",
+                          "example": "OK"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Place or user not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 404 },
+                        "message": { "type": "string", "example": "Not Found" },
+                        "description": {
+                          "type": "string",
+                          "example": "Place not found or user ont found"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User hasn't got privilege to update permissions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
+                        "description": {
+                          "type": "string",
+                          "example": "User doesn't have membership in this place or required privileges"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": ["User places"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+
+    "/api/v1/user-place/members/services": {
+      "put": {
+        "operationId": "UserPlaceController_UserplaceUpdateUserServices",
+        "summary": "Update services and its permissions for user in userplace",
+        "description": "Change services with its service_permissions for user in specific userplace",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserplaceUpdateUserServicesDTO" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": {
+                          "type": "string",
+                          "example": "OK"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Place or user not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 404 },
+                        "message": { "type": "string", "example": "Not Found" },
+                        "description": {
+                          "type": "string",
+                          "example": "Place not found or user not found"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User hasn't got privilege to update services of other users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
+                        "description": {
+                          "type": "string",
+                          "example": "User doesn't have membership in this place or required privileges"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": ["User places"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+
     "/api/v1/profile/device": {
       "post": {
         "operationId": "UserDeviceController_addDeviceToRoom",
@@ -3423,6 +4271,10 @@
       "name": "User places",
       "description": "User places APIs (adding removing etc)"
     },
+    {
+      "name": "QR codes",
+      "description": "QR codes APIs (scan cases, create, remove, get)"
+    },
     { "name": "Room", "description": "Room APIs (adding removing etc)" },
     {
       "name": "User devices",
@@ -4311,30 +5163,37 @@
             "example": "61e51d05d10fcc0a53b8cbd9"
           },
           "status": {
-            "enum": ["demo", "pending", "rejected", "confirmed"],
+            "enum": ["demo", "pending", "invited", "confirmed"],
             "type": "string",
-            "description": "User-place confirmation status",
-            "example": "accepted"
+            "description": "User membership confirmation status in this place",
+            "example": "confirmed"
           },
-          "name": {
+          "titile": {
             "type": "string",
-            "description": "Custom name of a place given by user.",
+            "description": "Custom name of a place given by specific member.",
             "example": "My wonderfull flat"
           },
           "address": {
             "type": "string",
             "description": "Address string divided into parts eith ; sign.",
             "example": "Flat 12, Floor 3, Building 4, ..."
-          },
-          "registered_services": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/UserServiceDTO"
-            }
           }
         },
-        "required": ["registered_services"]
+        "required": ["place_id", "title", "status", "address"]
       },
+
+      "UserPlaceMembersOutputDTO": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "MongoId of a user_profile",
+            "example": "61e51d05d10fcc0a53b8cbd9"
+          }
+        },
+        "required": ["user_id"]
+      },
+
       "UpdateContactDTO": {
         "type": "object",
         "properties": {
@@ -4637,14 +5496,177 @@
       },
       "UpdateUserPlaceDTO": {
         "type": "object",
+        "required": ["place_id", "title"],
         "properties": {
-          "name": {
+          "place_id": {
+            "type": "string",
+            "description": "Mongo id of the place",
+            "example": "62b331033073b331e567e44f"
+          },
+          "title": {
             "type": "string",
             "description": "Custom user-place name given by user",
             "example": "My flat"
           }
         }
       },
+      "LeaveUserPlaceDTO": {
+        "type": "object",
+        "required": ["place_id"],
+        "properties": {
+          "place_id": {
+            "type": "string",
+            "description": "Mongo id of the place",
+            "example": "62b331033073b331e567e44f"
+          }
+        }
+      },
+
+      "UserplaceUpdateUserPrivilegesDTO": {
+        "type": "object",
+        "required": ["user_id", "place_id", "priveleges"],
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "Mongo id of user to update",
+            "example": "62b331033073b331e567e44f"
+          },
+          "place_id": {
+            "type": "string",
+            "description": "Mongo id of place to update",
+            "example": "62b331033073b331e567e44f"
+          },
+          "priveleges": {
+            "type": "array",
+            "description": "List of user priveleges inside the userplace",
+            "items": {
+              "description": "'member_management', 'service_sharing', 'privilege_management'",
+              "type": "string",
+              "enum": ["member_management", "service_sharing", "privilege_management"],
+              "example": "member_management"
+            }
+          }
+        }
+      },
+
+      "UserplaceUpdateUserServicesDTO": {
+        "type": "object",
+        "required": ["user_id", "place_id", "services"],
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "Mongo id of user to update",
+            "example": "62b331033073b331e567e44f"
+          },
+          "place_id": {
+            "type": "string",
+            "description": "Mongo id of place to update",
+            "example": "62b331033073b331e545a33c"
+          },
+          "services": {
+            "type": "array",
+            "description": "List of services",
+            "items": {
+              "type": "object",
+              "example": {
+                "service_id": "62b331033073b331e009c5a1"
+              }
+            }
+          }
+        }
+      },
+
+      "ObjectId": {
+        "type": "string",
+        "example": "62b331033073b331e567e44f"
+      },
+
+      "JoinByQrCodeDTO": {
+        "type": "object",
+        "required": ["qr_code_id"],
+        "properties": {
+          "qr_code_id": {
+            "type": "string",
+            "description": "Mongo id of QR code",
+            "example": "62b331033073b331e567e44f"
+          }
+        }
+      },
+
+      "UserPlaceCreateQrCodeDTO": {
+        "type": "object",
+        "required": ["place_id", "one_time"],
+        "properties": {
+          "place_id": {
+            "type": "string",
+            "description": "Mongo id of place to generate code for",
+            "example": "62b331033073b331e567e44f"
+          },
+          "one_time": {
+            "type": "boolean",
+            "description": "Flag to delete code after the first scan",
+            "example": true
+          }
+        }
+      },
+
+      "UserplaceQrCodeInputDTO": {
+        "type": "object",
+        "required": ["qr_code_id"],
+        "properties": {
+          "qr_code_id": {
+            "type": "string",
+            "description": "Mongo id of QR code",
+            "example": "62b331033073b331e567e44f"
+          }
+        }
+      },
+
+      "UserPlaceQrCodeOutputDTO": {
+        "type": "object",
+        "required": ["qr_code_id"],
+        "properties": {
+          "qr_code_id": {
+            "type": "string",
+            "description": "Mongo id of QR code",
+            "example": "62b331033073b331e567e44f"
+          }
+        }
+      },
+
+      "AcceptUserPlaceMemberDTO": {
+        "type": "object",
+        "required": ["user_id", "place_id"],
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "Mongo id of user to make him a member",
+            "example": "62b331033073b331e567e44f"
+          },
+          "place_id": {
+            "type": "string",
+            "description": "Mongo id of the place to add a new member ",
+            "example": "62b331033073b331e545a33c"
+          }
+        }
+      },
+      "UserplaceKickUserDTO": {
+        "type": "object",
+        "required": ["user_id", "place_id"],
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "Mongo id of user to delete from userplace",
+            "example": "62b331033073b331e567e44f"
+          },
+          "place_id": {
+            "type": "string",
+            "description": "Mongo id of the place to kick user from",
+            "example": "62b331033073b331e545a33c"
+          }
+        }
+      },
+
       "RoomDeviceInput": {
         "type": "object",
         "properties": {
@@ -4781,9 +5803,7 @@
           "configuration": {
             "description": "Configuration of intercom ",
             "example": { "key": "value" },
-            "allOf": [
-              { "$ref": "#/components/schemas/IntercomConfigurationDTO" }
-            ]
+            "allOf": [{ "$ref": "#/components/schemas/IntercomConfigurationDTO" }]
           }
         },
         "required": ["id"]
@@ -4925,13 +5945,7 @@
             "example": "active"
           },
           "type": {
-            "enum": [
-              "intercom",
-              "camera",
-              "smart_home",
-              "utilities",
-              "internet"
-            ],
+            "enum": ["intercom", "camera", "smart_home", "utilities", "internet"],
             "type": "string",
             "description": "service type ",
             "example": "intercom"
@@ -4958,11 +5972,7 @@
           },
           "devices": {
             "description": "devices available at this service",
-            "example": [
-              "61e51d0dd10fcc0a53b8cbe1",
-              "61e51d0dd10fcc0a53b8cbec",
-              "61e51d0dd10fcc0a53b8cbea"
-            ],
+            "example": ["61e51d0dd10fcc0a53b8cbe1", "61e51d0dd10fcc0a53b8cbec", "61e51d0dd10fcc0a53b8cbea"],
             "type": "array",
             "items": { "type": "string" }
           }
