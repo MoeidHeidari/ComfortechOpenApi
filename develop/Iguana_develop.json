@@ -2284,8 +2284,8 @@
     "/api/v1/user-place/qrcode": {
       "post": {
         "operationId": "UserPlaceController_CreateUserplaceQrCOde",
-        "summary": "Create qrcode to share place ",
-        "description": "Add user to place by scanning QR code",
+        "summary": "Create QR code to share userplace ",
+        "description": "Create and get QR code to share userplace",
         "requestBody": {
           "required": true,
           "content": {
@@ -2380,7 +2380,7 @@
       "delete": {
         "operationId": "UserPlaceController_removeUserplaceQrCode",
         "summary": "Delete QR code by qr_code_id",
-        "description": "Reject membership request / Remove user from the userplace",
+        "description": "Delete QR code for userplace by qr_code_id",
         "requestBody": {
           "required": true,
           "content": {
