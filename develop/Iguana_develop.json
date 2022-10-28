@@ -5606,11 +5606,11 @@
       },
       "JoinByPhoneDTO": {
         "type": "object",
-        "required": ["type", "value"],
+        "required": ["type", "value", "place_id"],
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["phone", " qr"],
+            "enum": ["phone", "qr"],
             "description": "type of value (phone or qr) ",
             "example": "phone"
           },
@@ -5618,6 +5618,11 @@
             "type": "string",
             "description": "Mongo id of QR code or Phone number ",
             "example": "+744443332211"
+          },
+          "place_id": {
+            "type": "string",
+            "description": "Mongo id of place",
+            "example": "62b331033073b331e545a33c"
           }
         }
       },
