@@ -5546,9 +5546,9 @@
             "type": "array",
             "description": "List of user priveleges inside the userplace",
             "items": {
-              "description": "'member_management', 'service_sharing', 'privilege_management'",
+              "description": "'member_management', 'service_management', 'privilege_management'",
               "type": "string",
-              "enum": ["member_management", "service_sharing", "privilege_management"],
+              "enum": ["member_management", "service_management", "privilege_management"],
               "example": "member_management"
             }
           }
