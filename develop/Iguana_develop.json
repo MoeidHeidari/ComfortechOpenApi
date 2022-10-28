@@ -2193,8 +2193,8 @@
     "/api/v1/user-place/{place_id}/qrcode": {
       "get": {
         "operationId": "UserPlaceController_getUserplaceQrCodes",
-        "summary": "Get list of user's QR codes for userplace",
-        "description": "Get list of qr codes this user generated for specific userplace",
+        "summary": "Get user's permanent QR code to share userplace",
+        "description": "Get user's the only one not one-time QR code for exact userplace",
         "parameters": [
           {
             "name": "place_id",
@@ -2205,7 +2205,7 @@
         ],
         "responses": {
           "200": {
-            "description": "List of QR codes returned",
+            "description": "Returns the only one permanent QR code",
             "content": {
               "application/json": {
                 "schema": {
@@ -2214,10 +2214,7 @@
                     {
                       "properties": {
                         "data": {
-                          "type": "array",
-                          "items": {
-                            "$ref": "#/components/schemas/UserPlaceQrCodeOutputDTO"
-                          }
+                          "$ref": "#/components/schemas/UserPlaceQrCodeOutputDTO"
                         },
                         "type": { "type": "string", "example": "Success" },
                         "status": { "type": "number", "example": 200 },
