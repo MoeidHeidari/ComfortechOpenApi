@@ -5195,6 +5195,32 @@
             "type": "string",
             "description": "MongoId of a user_profile",
             "example": "61e51d05d10fcc0a53b8cbd9"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["demo", "invited", "pending", "accepted"],
+            "description": "status of member in userplace",
+            "example": "accepted"
+          },
+          "priveleges": {
+            "type": "array",
+            "description": "List of user priveleges inside the userplace",
+            "items": {
+              "description": "'member_management', 'service_management', 'privilege_management'",
+              "type": "string",
+              "enum": ["member_management", "service_management", "privilege_management"],
+              "example": "member_management"
+            }
+          },
+          "services": {
+            "type": "array",
+            "description": "List of services",
+            "items": {
+              "type": "object",
+              "example": {
+                "service_id": "62b331033073b331e009c5a1"
+              }
+            }
           }
         },
         "required": ["user_id"]
