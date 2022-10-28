@@ -5195,6 +5195,32 @@
             "type": "string",
             "description": "MongoId of a user_profile",
             "example": "61e51d05d10fcc0a53b8cbd9"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["demo", "invited", "pending", "accepted"],
+            "description": "status of member in userplace",
+            "example": "accepted"
+          },
+          "priveleges": {
+            "type": "array",
+            "description": "List of user priveleges inside the userplace",
+            "items": {
+              "description": "'member_management', 'service_management', 'privilege_management'",
+              "type": "string",
+              "enum": ["member_management", "service_management", "privilege_management"],
+              "example": "member_management"
+            }
+          },
+          "services": {
+            "type": "array",
+            "description": "List of services",
+            "items": {
+              "type": "object",
+              "example": {
+                "service_id": "62b331033073b331e009c5a1"
+              }
+            }
           }
         },
         "required": ["user_id"]
@@ -5546,9 +5572,9 @@
             "type": "array",
             "description": "List of user priveleges inside the userplace",
             "items": {
-              "description": "'member_management', 'service_sharing', 'privilege_management'",
+              "description": "'member_management', 'service_management', 'privilege_management'",
               "type": "string",
-              "enum": ["member_management", "service_sharing", "privilege_management"],
+              "enum": ["member_management", "service_management", "privilege_management"],
               "example": "member_management"
             }
           }
@@ -5606,11 +5632,11 @@
       },
       "JoinByPhoneDTO": {
         "type": "object",
-        "required": ["type", "value"],
+        "required": ["type", "value", "place_id"],
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["phone", " qr"],
+            "enum": ["phone", "qr"],
             "description": "type of value (phone or qr) ",
             "example": "phone"
           },
@@ -5618,6 +5644,11 @@
             "type": "string",
             "description": "Mongo id of QR code or Phone number ",
             "example": "+744443332211"
+          },
+          "place_id": {
+            "type": "string",
+            "description": "Mongo id of place",
+            "example": "62b331033073b331e545a33c"
           }
         }
       },
