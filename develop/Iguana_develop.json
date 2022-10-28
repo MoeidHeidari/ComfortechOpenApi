@@ -1884,13 +1884,22 @@
     "/api/v1/user-place/members": {
       "post": {
         "operationId": "UserPlaceController_MembershipRequset",
-        "summary": "Join userplace by QR code",
-        "description": "Add user to place by scanning QR code",
+        "summary": "Join userplace by QR code or Invite by phone",
+        "description": "Add user to place by scanning QR code or Invite user by his phone number",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/JoinByQrCodeDTO" }
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/JoinByQrCodeDTO"
+                  },
+                  {
+                    "$ref": "#/components/schemas/JoinByPhoneDTO"
+                  }
+                ]
+              }
             }
           }
         },
@@ -2527,7 +2536,7 @@
                         "message": { "type": "string", "example": "Not Found" },
                         "description": {
                           "type": "string",
-                          "example": "Place not found or user ont found"
+                          "example": "Place not found or user not found"
                         }
                       }
                     }
@@ -5168,7 +5177,7 @@
             "description": "User membership confirmation status in this place",
             "example": "confirmed"
           },
-          "titile": {
+          "title": {
             "type": "string",
             "description": "Custom name of a place given by specific member.",
             "example": "My wonderfull flat"
@@ -5583,12 +5592,35 @@
 
       "JoinByQrCodeDTO": {
         "type": "object",
-        "required": ["qr_code_id"],
+        "required": ["type", "value"],
         "properties": {
-          "qr_code_id": {
+          "type": {
             "type": "string",
-            "description": "Mongo id of QR code",
+            "enum": ["phone", " qr"],
+            "description": "type of value (phone or qr) ",
+            "example": "qr"
+          },
+          "value": {
+            "type": "string",
+            "description": "Mongo id of QR code or Phone number ",
             "example": "62b331033073b331e567e44f"
+          }
+        }
+      },
+      "JoinByPhoneDTO": {
+        "type": "object",
+        "required": ["type", "value"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["phone", " qr"],
+            "description": "type of value (phone or qr) ",
+            "example": "phone"
+          },
+          "value": {
+            "type": "string",
+            "description": "Mongo id of QR code or Phone number ",
+            "example": "+744443332211"
           }
         }
       },
