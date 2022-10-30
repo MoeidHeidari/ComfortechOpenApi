@@ -5692,11 +5692,16 @@
 
       "JoinByQrCodeOutputDTO": {
         "type": "object",
-        "required": ["place_id"],
+        "required": ["place_id", "member_id"],
         "properties": {
           "place_id": {
             "type": "string",
             "description": "Mongo id of place",
+            "example": "62b331033073b331e567e44f"
+          },
+          "member_id": {
+            "type": "string",
+            "description": "Mongo id of member (id of user profile)",
             "example": "62b331033073b331e567e44f"
           }
         }
