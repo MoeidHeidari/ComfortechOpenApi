@@ -10,7 +10,7 @@
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version": "1.1"
+    "version": "1.2"
   },
   "externalDocs": {
     "description": "Find out more about Swagger",
@@ -1812,6 +1812,102 @@
                           "type": "array",
                           "items": {
                             "$ref": "#/components/schemas/UserPlaceMembersOutputDTO"
+                          }
+                        },
+                        "type": { "type": "string", "example": "Success" },
+                        "status": { "type": "number", "example": 200 },
+                        "message": { "type": "string", "example": "OK" },
+                        "description": {
+                          "type": "string",
+                          "example": "The request has succeeded"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Place not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 404 },
+                        "message": { "type": "string", "example": "Not Found" },
+                        "description": {
+                          "type": "string",
+                          "example": "The server has not found anything matching the Request-URI"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "This place does not contain this user in member list ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": { "type": "object", "example": {} },
+                        "type": { "type": "string", "example": "Client Error" },
+                        "status": { "type": "number", "example": 403 },
+                        "message": { "type": "string", "example": "Forbidden" },
+                        "description": {
+                          "type": "string",
+                          "example": "User does not have this place"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": ["User places"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/api/v1/user-place/{place_id}/services": {
+      "get": {
+        "operationId": "UserPlaceController_readUserPlaceServices",
+        "summary": "Lists member's shared services of a specific userplace",
+        "description": "Get list of services that are available for user in specific place",
+        "parameters": [
+          {
+            "name": "place_id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully returned list of services",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/HttpResponse" },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/UserPlaceServicesListDTO"
                           }
                         },
                         "type": { "type": "string", "example": "Success" },
@@ -5596,6 +5692,31 @@
         }
       },
 
+      "UserPlaceServicesListDTO": {
+        "required": ["service_id", "devices"],
+        "properties": {
+          "service_id": {
+            "type": "string",
+            "description": "mongo id of service",
+            "example": "62b331033073b331e009c5a1"
+          },
+          "plan_id": {
+            "type": "string",
+            "description": "mongo id of plan",
+            "example": "62b331033073b331bbc99801"
+          },
+          "devices": {
+            "type": "array",
+            "description": "list of devices of this service",
+            "items": {
+              "type": "string",
+              "description": "mongo id of device",
+              "example": "62b331033073b331e087cba4"
+            }
+          }
+        }
+      },
+
       "UserplaceUpdateUserServicesDTO": {
         "type": "object",
         "required": ["user_id", "place_id", "services"],
@@ -5612,9 +5733,8 @@
           },
           "services": {
             "type": "array",
-            "description": "List of services",
             "items": {
-              "$ref": "#/components/schemas/UserplaceUpdateUserServicesDTO"
+              "$ref": "#/components/schemas/UserPlaceServicesListDTO"
             }
           }
         }
