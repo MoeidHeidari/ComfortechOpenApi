@@ -1,398 +1,413 @@
 {
-	"openapi": "3.0.3",
-	"info": {
-		"title": "Pyrador_develop APIs",
-		"description": "this document contains all the APIs provided by Pyrador",
-		"termsOfService": "http://swagger.io/terms/",
-		"contact": {
-			"email": "apiteam@swagger.io"
-		},
-		"license": {
-			"name": "Apache 2.0",
-			"url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-		},
-		"version": "1.0.11"
-	},
-	"externalDocs": {
-		"description": "Find out more about Swagger",
-		"url": "http://swagger.io"
-	},
-	"components": {
-		"schemas": {
-			"UserLoginDTO": {
-				"type": "object",
-				"properties": {
-					"username": {
-						"type": "string"
-					},
-					"password": {
-						"type": "string"
-					},
-					"grant_type": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"username",
-					"password",
-					"grant_type"
-				]
-			},
-			"GetTokensByRefreshTokenDTO": {
-				"type": "object",
-				"properties": {
-					"refresh_token": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"refresh_token"
-				]
-			},
-			"RequestPasswordRecoveryDTO": {
-				"type": "object",
-				"properties": {
-					"username": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"username"
-				]
-			},
-			"VerifyPasswordRecoveryDTO": {
-				"type": "object",
-				"properties": {
-					"username": {
-						"type": "string"
-					},
-					"token": {
-						"type": "string"
-					},
-					"password": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"username",
-					"token",
-					"password"
-				]
-			}
-		}
-	},
-	"paths": {
-		"/api/v1/auth/login": {
-			"post": {
-				"operationId": "UserController_login",
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/UserLoginDTO"
-							}
-						}
-					}
-				},
-				"responses": {
-					"201": {
-						"description": "",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "object"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"User"
-				]
-			}
-		},
-		"/api/v1/auth/refresh-token": {
-			"post": {
-				"operationId": "UserController_getTokensByRefreshToken",
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/GetTokensByRefreshTokenDTO"
-							}
-						}
-					}
-				},
-				"responses": {
-					"201": {
-						"description": "",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "object"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"User"
-				]
-			}
-		},
-		"/api/v1/auth/logout": {
-			"post": {
-				"operationId": "UserController_logout",
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/GetTokensByRefreshTokenDTO"
-							}
-						}
-					}
-				},
-				"responses": {
-					"201": {
-						"description": "",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "object"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"User"
-				]
-			}
-		},
-		"/api/v1/auth/start-challenge": {
-			"post": {
-				"operationId": "UserController_startChallenge",
-				"parameters": [],
-				"responses": {
-					"201": {
-						"description": "",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "object"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"User"
-				]
-			}
-		},
-		"/api/v1/password-recovery": {
-			"post": {
-				"operationId": "PasswordRecoveryController_requestRecovery",
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/RequestPasswordRecoveryDTO"
-							}
-						}
-					}
-				},
-				"responses": {
-					"201": {
-						"description": "",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "object"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/api/v1/password-recovery/verify": {
-			"post": {
-				"operationId": "PasswordRecoveryController_confirmRecovery",
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/VerifyPasswordRecoveryDTO"
-							}
-						}
-					}
-				},
-				"responses": {
-					"201": {
-						"description": "",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "object"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/api/v1/kafka/controller": {
-			"post": {
-				"operationId": "KafkaController_add",
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"type": "string"
-							}
-						}
-					}
-				},
-				"responses": {
-					"201": {
-						"description": "",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "object"
-								}
-							}
-						}
-					}
-				}
-			},
-			"delete": {
-				"operationId": "KafkaController_delete",
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"type": "string"
-							}
-						}
-					}
-				},
-				"responses": {
-					"200": {
-						"description": "",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "object"
-								}
-							}
-						}
-					}
-				}
-			},
-			"get": {
-				"operationId": "KafkaController_get",
-				"parameters": [],
-				"responses": {
-					"200": {
-						"description": "",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "object"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/api/v1/kafka/controller/list": {
-			"get": {
-				"operationId": "KafkaController_getList",
-				"parameters": [],
-				"responses": {
-					"200": {
-						"description": "",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "object"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/api/v1/kafka/controller/info": {
-			"get": {
-				"operationId": "KafkaController_getInfo",
-				"parameters": [],
-				"responses": {
-					"200": {
-						"description": "",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "object"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/api/v1/kafka/controller/test": {
-			"get": {
-				"operationId": "KafkaController_httpTest",
-				"parameters": [],
-				"responses": {
-					"200": {
-						"description": "",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "object"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"undefined": {
-			"undefined": {
-				"parameters": [],
-				"responses": {
-					"200": {
-						"description": "",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "object"
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Pyrador_develop APIs",
+    "description": "this document contains all the APIs provided by Pyrador",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "apiteam@swagger.io"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.11"
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  },
+  "components": {
+    "schemas": {
+      "UserLoginDTO": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "grant_type": {
+            "type": "string"
+          }
+        },
+        "required": ["username", "password", "grant_type"]
+      },
+      "LoginOutputDTO": {
+        "type": "object",
+        "example": {
+          "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJrNkVLN28zdmxWTXl4dzZmbHdWRnlIY05lOTZCRFEydUpYUmVvb1hJQkdrIn0.eyJleHAiOjE2Njk4Mzk0OTUsImlhdCI6MTY2OTgwMzQ5NSwianRpIjoiMmViZTc4NjItMmIxYi00MDU2LWFmOWMtYzQzNzI5NGM5YmEyIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnRlY2hwYWwucnUvYXV0aC9yZWFsbXMvY29tZm9ydGVjaF9kZXZlbG9wbWVudCIsInN1YiI6ImIwMDhlMzQ5LWM5NmYtNDJkZS05MzRjLTA0MjVjNGU3MjkzNCIsInR5cCI6IkJlYXJlciIsImF6cCI6ImNvbWZvcnRlY2giLCJzZXNzaW9uX3N0YXRlIjoiZjYzZTZiZjQtYjY2YS00MDE5LTk0M2YtYTVhOWI2NzNlMWJmIiwiYWNyIjoiMSIsInJlc291cmNlX2FjY2VzcyI6eyJjb21mb3J0ZWNoIjp7InJvbGVzIjpbInVzZXIiXX19LCJzY29wZSI6ImVtYWlsIHByb2ZpbGUiLCJzaWQiOiJmNjNlNmJmNC1iNjZhLTQwMTktOTQzZi1hNWE5YjY3M2UxYmYiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicHJlZmVycmVkX3VzZXJuYW1lIjoiKzc5OTk3NTUzMDAxIn0.JMlx9MJGxX0XnWl2JscULnqBit4ziDNvvwUHSNO6rLmLAUtTEVXJwNyZla5NCVKskGca3GSXnWBvRXwggo3I8AjmerFAycWb0nU1lKhePATttA4Vx919fE7QAfoOUn8j0eWj-LrUpBG4oWxEFkMIyxCiwv2HUFOesmmgY6FjBGhJIqeq__LfhJolemRPbo8w26vJuXPu2TxkRKNPXZHZwFCo6MLz4RJEUfmG5vC9aIziXTdrYNOfVuTeFdN3yOt9u0XDb8KrzZrZeOQdRZbRYqOZUyC8JweRzgE0hNJaE2tNri54HEAPEC71iTdd84DZb5anFjWbDMlm3xISXQ22PQ",
+          "expires_in": 36000,
+          "refresh_expires_in": 1800,
+          "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJjM2RmMjZkMC03NDVlLTQwMTktOThiOC1hOWMxOTk4ZDNmOGIifQ.eyJleHAiOjE2Njk4MDUyOTUsImlhdCI6MTY2OTgwMzQ5NSwianRpIjoiYTVkZGE2ZTktZjBhYy00NGJlLTk3MzctZWI5MzcyNGFlYTUzIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnRlY2hwYWwucnUvYXV0aC9yZWFsbXMvY29tZm9ydGVjaF9kZXZlbG9wbWVudCIsImF1ZCI6Imh0dHBzOi8vYXV0aC50ZWNocGFsLnJ1L2F1dGgvcmVhbG1zL2NvbWZvcnRlY2hfZGV2ZWxvcG1lbnQiLCJzdWIiOiJiMDA4ZTM0OS1jOTZmLTQyZGUtOTM0Yy0wNDI1YzRlNzI5MzQiLCJ0eXAiOiJSZWZyZXNoIiwiYXpwIjoiY29tZm9ydGVjaCIsInNlc3Npb25fc3RhdGUiOiJmNjNlNmJmNC1iNjZhLTQwMTktOTQzZi1hNWE5YjY3M2UxYmYiLCJzY29wZSI6ImVtYWlsIHByb2ZpbGUiLCJzaWQiOiJmNjNlNmJmNC1iNjZhLTQwMTktOTQzZi1hNWE5YjY3M2UxYmYifQ.NqajhbK1YDRMTeXLZoV3r2bEQO9B1jF2ytLoRQvbsTw",
+          "token_type": "Bearer",
+          "not-before-policy": 0,
+          "session_state": "f63e6bf4-b66a-4019-943f-a5a9b673e1bf",
+          "scope": "email profile",
+          "profile": {
+            "_id": "636bd5217b9193f90f765f21",
+            "account_type": "user",
+            "updated_at": "2022-11-09T16:27:15.796Z",
+            "created_at": "2022-11-09T16:27:15.796Z",
+            "subscription_method": "by_phone_number",
+            "last_login_method": "unrecognized",
+            "confirmed_roles_and_conditions": [],
+            "logins_history": [],
+            "activity_notes": [],
+            "is_fingerprint_activated": false,
+            "account_number": null,
+            "balance": 0,
+            "account_id": "b008e349-c96f-42de-934c-0425c4e72934",
+            "user_data": {
+              "_id": "636bd5217b9193f90f765f22",
+              "first_name": "Alexander",
+              "last_name": "Evsikov",
+              "phone_number": "+79997553001"
+            },
+            "__v": 0
+          },
+          "trudesk_token": "21605817c220e113ec69af5cbe6950e307f8c87e"
+        }
+      },
+      "GetTokensByRefreshTokenDTO": {
+        "type": "object",
+        "properties": {
+          "refresh_token": {
+            "type": "string"
+          }
+        },
+        "required": ["refresh_token"]
+      },
+      "RequestPasswordRecoveryDTO": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          }
+        },
+        "required": ["username"]
+      },
+      "VerifyPasswordRecoveryDTO": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": ["username", "token", "password"]
+      }
+    }
+  },
+  "paths": {
+    "/api/v1/auth/login": {
+      "post": {
+        "operationId": "UserController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginOutputDTO"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["User"]
+      }
+    },
+    "/api/v1/auth/refresh-token": {
+      "post": {
+        "operationId": "UserController_getTokensByRefreshToken",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetTokensByRefreshTokenDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["User"]
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "operationId": "UserController_logout",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetTokensByRefreshTokenDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["User"]
+      }
+    },
+    "/api/v1/auth/start-challenge": {
+      "post": {
+        "operationId": "UserController_startChallenge",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["User"]
+      }
+    },
+    "/api/v1/password-recovery": {
+      "post": {
+        "operationId": "PasswordRecoveryController_requestRecovery",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestPasswordRecoveryDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/password-recovery/verify": {
+      "post": {
+        "operationId": "PasswordRecoveryController_confirmRecovery",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyPasswordRecoveryDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/kafka/controller": {
+      "post": {
+        "operationId": "KafkaController_add",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "KafkaController_delete",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "KafkaController_get",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/kafka/controller/list": {
+      "get": {
+        "operationId": "KafkaController_getList",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/kafka/controller/info": {
+      "get": {
+        "operationId": "KafkaController_getInfo",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/kafka/controller/test": {
+      "get": {
+        "operationId": "KafkaController_httpTest",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "undefined": {
+      "undefined": {
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

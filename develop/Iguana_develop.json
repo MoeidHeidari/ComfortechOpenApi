@@ -592,7 +592,10 @@
                     "status": 201,
                     "message": "Created",
                     "description": "The request has been fulfilled and resulted in a new resource being created",
-                    "data": { "id": "632202420bee25ae6a1d6ad6" }
+                    "data": {
+                      "id": "632202420bee25ae6a1d6ad6",
+                      "trudesk_token": "21605817c220e113ec69af5cbe6950e307f8c87e"
+                    }
                   }
                 }
               }
@@ -2570,7 +2573,7 @@
       }
     },
 
-    "/api/v1/user-place/members/privileges": {
+    "/api/v1/user-place/members/priveleges": {
       "put": {
         "operationId": "UserPlaceController_UserplaceUpdateUserPrivileges ",
         "summary": "Change privileges for user by user_id and place_id",
@@ -5265,10 +5268,10 @@
             "example": "61e51d05d10fcc0a53b8cbd9"
           },
           "status": {
-            "enum": ["demo", "pending", "invited", "accepted"],
+            "enum": ["demo", "pending", "invited", "confirmed"],
             "type": "string",
             "description": "User membership confirmation status in this place",
-            "example": "accepted"
+            "example": "confirmed"
           },
           "title": {
             "type": "string",
@@ -5279,21 +5282,6 @@
             "type": "string",
             "description": "Address string divided into parts eith ; sign.",
             "example": "Flat 12, Floor 3, Building 4, ..."
-          },
-          "services": {
-            "type": "array",
-            "description": "Array of services",
-            "items": {
-              "$ref": "#/components/schemas/UserPlaceServiceDTO"
-            }
-          },
-          "privileges": {
-            "type": "array",
-            "description": "Array of privileges",
-            "items": {
-              "type": "string",
-              "enum": ["member_management", "service_management", "privilege_management"]
-            }
           }
         },
         "required": ["place_id", "title", "status", "address"]
@@ -5313,9 +5301,9 @@
             "description": "status of member in userplace",
             "example": "accepted"
           },
-          "privileges": {
+          "priveleges": {
             "type": "array",
-            "description": "List of user privileges inside the userplace",
+            "description": "List of user priveleges inside the userplace",
             "items": {
               "description": "'member_management', 'service_management', 'privilege_management'",
               "type": "string",
@@ -5513,7 +5501,7 @@
             "example": "Olegovich"
           }
         },
-        "required": ["first_name"]
+        "required": ["first_name", "last_name"]
       },
       "SetAccountNumberDTO": {
         "type": "object",
@@ -5667,7 +5655,7 @@
 
       "UserplaceUpdateUserPrivilegesDTO": {
         "type": "object",
-        "required": ["user_id", "place_id", "privileges"],
+        "required": ["user_id", "place_id", "priveleges"],
         "properties": {
           "user_id": {
             "type": "string",
@@ -5679,9 +5667,9 @@
             "description": "Mongo id of place to update",
             "example": "62b331033073b331e567e44f"
           },
-          "privileges": {
+          "priveleges": {
             "type": "array",
-            "description": "List of user privileges inside the userplace",
+            "description": "List of user priveleges inside the userplace",
             "items": {
               "description": "'member_management', 'service_management', 'privilege_management'",
               "type": "string",
@@ -5739,31 +5727,6 @@
           }
         }
       },
-      
-      "UserPlaceServiceDTO": {
-        "type": "object",
-        "required": ["service_id", "devices", "plan_id"],
-        "properties": {
-          "service_id": {
-            "type": "string",
-            "description": "Mongo id of service_id",
-            "example": "62b331033073b331e567e44f"
-          },
-          "devices": {
-            "type": "array",
-            "description": "list of devices",
-            "items": {
-              "type": "string",
-              "example": "62b331033073b331e009c5a1"
-            }
-          },
-          "plan_id": {
-            "type": "string",
-            "description": "id of plan",
-            "example": "62b331033073b331e009c5a1"
-          }
-        }
-      },
 
       "ObjectId": {
         "type": "string",
@@ -5812,16 +5775,11 @@
 
       "JoinByQrCodeOutputDTO": {
         "type": "object",
-        "required": ["place_id", "member_id"],
+        "required": ["place_id"],
         "properties": {
           "place_id": {
             "type": "string",
             "description": "Mongo id of place",
-            "example": "62b331033073b331e567e44f"
-          },
-          "member_id": {
-            "type": "string",
-            "description": "Mongo id of member (id of user profile)",
             "example": "62b331033073b331e567e44f"
           }
         }
