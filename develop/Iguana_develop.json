@@ -731,7 +731,7 @@
             }
           },
           "404": {
-            "description": "Profile of a user wos not found",
+            "description": "Profile of a user was not found",
             "content": {
               "application/json": {
                 "schema": {
