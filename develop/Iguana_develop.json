@@ -689,7 +689,7 @@
         "security": [{ "bearer": [] }]
       }
     },
-    "/api/v1/update/avatar": {
+    "/api/v1/upload/avatar": {
       "post": {
         "operationId": "FileStorage_uploadAvatar",
         "summary": "Updates the avatar",
