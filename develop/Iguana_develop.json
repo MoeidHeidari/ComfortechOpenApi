@@ -689,6 +689,68 @@
         "security": [{ "bearer": [] }]
       }
     },
+    "/api/v1/upload/avatar": {
+      "post": {
+        "operationId": "FileStorage_uploadAvatar",
+        "summary": "Updates the avatar",
+        "description": "Sets the profile avatar and returns direct URL to uploaded img",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Avatar loaded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "type": "Success",
+                    "status": 200,
+                    "message": "OK",
+                    "description": "The request has succeeded",
+                    "data": {
+                      "path": "localhopst:9000/test-bocket/9781235978129.png"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Profile of a user was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "type": "Client Error",
+                    "status": 404,
+                    "message": "Not Found",
+                    "description": "User profile not found",
+                    "data": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Profile"],
+        "security": [{ "bearer": [] }]
+      }
+    },
     "/api/v1/profile/user-data": {
       "get": {
         "operationId": "ProfileController_readUserData",
