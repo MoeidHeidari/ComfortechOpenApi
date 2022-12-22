@@ -385,6 +385,76 @@
         "required": [
           "lock"
         ]
+      },
+      "UpdateDocumentDTO": {
+        "type": "object",
+        "description": "Updates the document's subdocument",
+        "properties": {
+          "filter": {
+            "description": "Filter for query",
+            "type": "object"
+          },
+          "data": {
+            "description": "Subdocument data",
+            "type": "object"
+          },
+          "name": {
+            "description": "Subdocument name",
+            "type": "string"
+          },
+          "subcol_filter": {
+            "description": "Subcollection filter",
+            "type": "object"
+          }
+        },
+        "required": [
+          "filter",
+          "data"
+        ]
+      },
+      "PushToSubcolDTO": {
+        "type": "object",
+        "description": "Pushes new document to subcollection",
+        "properties": {
+          "filter": {
+            "type": "object",
+            "description": "Filter for query"
+          },
+          "name": {
+            "type": "string",
+            "description": "Subcollection name"
+          },
+          "data": {
+            "type": "object",
+            "description": "Subcollection's new document data"
+          }
+        },
+        "required": [
+          "filter",
+          "name",
+          "data"
+        ]
+      },
+      "FindInSubcolDTO": {
+        "type": "object",
+        "properties": {
+          "filter": {
+            "type": "object",
+            "description": "Filter for query"
+          },
+          "name": {
+            "type": "string",
+            "description": "Subcollection name"
+          },
+          "data": {
+            "type": "object",
+            "description": "Subcollection's new document data"
+          }
+        },
+        "required": [
+          "filter",
+          "name"
+        ]
       }
     }
   },
@@ -1898,130 +1968,6 @@
         "responses": {
           "200": {
             "description": ""
-          }
-        }
-      }
-    },
-    "/api/v1/kafka/controller": {
-      "post": {
-        "operationId": "KafkaController_add",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "operationId": "KafkaController_delete",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "operationId": "KafkaController_get",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/kafka/controller/list": {
-      "get": {
-        "operationId": "KafkaController_getList",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/kafka/controller/info": {
-      "get": {
-        "operationId": "KafkaController_getInfo",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/kafka/controller/test": {
-      "get": {
-        "operationId": "KafkaController_httpTest",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
           }
         }
       }
