@@ -5382,6 +5382,10 @@
                 "service_id": "62b331033073b331e009c5a1"
               }
             }
+          },
+          "avatar": {
+            "type": "string",
+            "example": "http://bucket.dev.dipal.ru/avatar_12cf6-ab1cd-21a41-c7c1_file.png"
           }
         },
         "required": ["user_id"]
