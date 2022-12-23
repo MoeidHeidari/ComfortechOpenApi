@@ -385,6 +385,88 @@
         "required": [
           "lock"
         ]
+      },
+      "UpdateDocumentDTO": {
+        "type": "object",
+        "description": "Updates the document's subdocument",
+        "properties": {
+          "filter": {
+            "description": "Filter for query",
+            "example": "info",
+            "type": "object"
+          },
+          "data": {
+            "description": "Subdocument data",
+            "example": "00158D00052BCEE7",
+            "type": "object"
+          },
+          "name": {
+            "description": "Subdocument name",
+            "example": "EUI",
+            "type": "string"
+          },
+          "subcol_filter": {
+            "description": "Subcollection filter",
+            "example": {
+              "id": "61e51d06a4864953ba406af7"
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "filter",
+          "data"
+        ]
+      },
+      "PushToSubcolDTO": {
+        "type": "object",
+        "description": "Pushes new document to subcollection",
+        "properties": {
+          "filter": {
+            "type": "object",
+            "example": "info",
+            "description": "Filter for query"
+          },
+          "name": {
+            "type": "string",
+            "example": "OPENING_TIME",
+            "description": "Subcollection name"
+          },
+          "data": {
+            "type": "object",
+            "example": 3000,
+            "description": "Subcollection's new document data"
+          }
+        },
+        "required": [
+          "filter",
+          "name",
+          "data"
+        ]
+      },
+      "FindInSubcolDTO": {
+        "type": "object",
+        "properties": {
+          "filter": {
+            "type": "object",
+            "example": "info",
+            "description": "Filter for query"
+          },
+          "name": {
+            "type": "string",
+            "example": "CATEGORY",
+            "description": "Subcollection name"
+          },
+          "data": {
+            "type": "object",
+            "example": "smart_home",
+            "description": "Subcollection's new document data"
+          }
+        },
+        "required": [
+          "filter",
+          "name"
+        ]
       }
     }
   },
@@ -1898,130 +1980,6 @@
         "responses": {
           "200": {
             "description": ""
-          }
-        }
-      }
-    },
-    "/api/v1/kafka/controller": {
-      "post": {
-        "operationId": "KafkaController_add",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "operationId": "KafkaController_delete",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "operationId": "KafkaController_get",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/kafka/controller/list": {
-      "get": {
-        "operationId": "KafkaController_getList",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/kafka/controller/info": {
-      "get": {
-        "operationId": "KafkaController_getInfo",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/kafka/controller/test": {
-      "get": {
-        "operationId": "KafkaController_httpTest",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
           }
         }
       }
