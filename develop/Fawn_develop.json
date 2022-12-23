@@ -392,18 +392,24 @@
         "properties": {
           "filter": {
             "description": "Filter for query",
+            "example": "info",
             "type": "object"
           },
           "data": {
             "description": "Subdocument data",
+            "example": "00158D00052BCEE7",
             "type": "object"
           },
           "name": {
             "description": "Subdocument name",
+            "example": "EUI",
             "type": "string"
           },
           "subcol_filter": {
             "description": "Subcollection filter",
+            "example": {
+              "id": "61e51d06a4864953ba406af7"
+            },
             "type": "object"
           }
         },
@@ -418,14 +424,17 @@
         "properties": {
           "filter": {
             "type": "object",
+            "example": "info",
             "description": "Filter for query"
           },
           "name": {
             "type": "string",
+            "example": "OPENING_TIME",
             "description": "Subcollection name"
           },
           "data": {
             "type": "object",
+            "example": 3000,
             "description": "Subcollection's new document data"
           }
         },
@@ -440,14 +449,17 @@
         "properties": {
           "filter": {
             "type": "object",
+            "example": "info",
             "description": "Filter for query"
           },
           "name": {
             "type": "string",
+            "example": "CATEGORY",
             "description": "Subcollection name"
           },
           "data": {
             "type": "object",
+            "example": "smart_home",
             "description": "Subcollection's new document data"
           }
         },
