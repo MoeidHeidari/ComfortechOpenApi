@@ -6153,40 +6153,10 @@
 						],
 						"example": "intercom_call"
 					},
-					"action": {
-						"type": "string",
-						"description": "Notification action",
-						"enum": [
-							"invitation_confirmed",
-							"invitation_received",
-							"request_confirmed",
-							"request_recieved",
-							"member_kicked",
-							"member_left",
-							"services_updated",
-							"service_added",
-							"service_removed",
-							"privileges_updated",
-							"privilege_added",
-							"privilege_removed"
-						],
-						"example": "privilege_removed"
-					},
 					"body": {
 						"type": "string",
 						"description": "Notification body",
 						"example": "You were kicked from flat 69"
-					},
-					"payload": {
-						"type": "object",
-						"description": "Notification payload",
-						"example": {
-							"intercom_id": "63b6f979362e39ab0b0d9ed3",
-							"place_id": "63b6f979362e39ab0b0d9ed4",
-							"title": "intercom_title",
-							"address": "Saint-Petersburg, Puschkin st., Kolotushkin bld, 69",
-							"type": "intercom_call"
-						}
 					},
 					"target": {
 						"type": "string",
