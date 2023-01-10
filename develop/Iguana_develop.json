@@ -6022,7 +6022,9 @@
 											"properties": {
 												"data": {
 													"type": "array",
-													"$ref": "#/components/schemas/GetNotificationOutputDTO"
+													"items": {
+														"$ref": "#/components/schemas/GetNotificationOutputDTO"
+													}
 												},
 												"type": {
 													"type": "string",
@@ -6136,27 +6138,63 @@
 			"GetNotificationOutputDTO": {
 				"type": "object",
 				"properties": {
-					"title": {
-						"type": "string",
-						"description": "Notification title",
-						"example": "You were kicked"
+					"push": {
+						"type": "object",
+						"properties": {
+							"title": {
+								"type": "string",
+								"description": "Notification title",
+								"example": "You were kicked"
+							},
+							"body": {
+								"type": "string",
+								"description": "Notification body",
+								"example": "You were kicked from flat 69"
+							}
+						}
 					},
-					"type": {
-						"type": "string",
-						"description": "Notification type",
-						"enum": [
-							"intercom_call",
-							"motion_sensor_notification",
-							"user_place",
-							"user_service",
-							"user_privilege"
-						],
-						"example": "intercom_call"
-					},
-					"body": {
-						"type": "string",
-						"description": "Notification body",
-						"example": "You were kicked from flat 69"
+					"payload": {
+						"type": "object",
+						"properties": {
+							"type": {
+								"type": "string",
+								"description": "Notification type",
+								"enum": [
+									"intercom_call",
+									"motion_sensor_notification",
+									"user_place",
+									"user_service",
+									"user_privilege"
+								],
+								"example": "intercom_call"
+							},
+							"action": {
+								"type": "string",
+								"nullable": true,
+								"description": "Notification action",
+								"enum": [
+									"invitation_confirmed",
+									"invitation_received",
+									"request_confirmed",
+									"request_recieved",
+									"member_kicked",
+									"member_left",
+									"services_updated",
+									"service_added",
+									"service_removed",
+									"privileges_updated",
+									"privilege_added",
+									"privilege_removed"
+								],
+								"example": "privilege_removed"
+							}
+						},
+						"example": {
+							"type": "user_place",
+							"action": "member_kicked",
+							"ancestor_name": "Kirill",
+							"place_name": "flat 69"
+						}
 					},
 					"target": {
 						"type": "string",
