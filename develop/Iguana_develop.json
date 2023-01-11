@@ -6138,68 +6138,32 @@
 			"GetNotificationOutputDTO": {
 				"type": "object",
 				"properties": {
-					"push": {
-						"type": "object",
-						"properties": {
-							"title": {
-								"type": "string",
-								"description": "Notification title",
-								"example": "You were kicked"
-							},
-							"body": {
-								"type": "string",
-								"description": "Notification body",
-								"example": "You were kicked from flat 69"
-							}
-						}
-					},
-					"payload": {
-						"type": "object",
-						"properties": {
-							"type": {
-								"type": "string",
-								"description": "Notification type",
-								"enum": [
-									"intercom_call",
-									"motion_sensor_notification",
-									"user_place",
-									"user_service",
-									"user_privilege"
-								],
-								"example": "intercom_call"
-							},
-							"action": {
-								"type": "string",
-								"nullable": true,
-								"description": "Notification action",
-								"enum": [
-									"invitation_confirmed",
-									"invitation_received",
-									"request_confirmed",
-									"request_recieved",
-									"member_kicked",
-									"member_left",
-									"services_updated",
-									"service_added",
-									"service_removed",
-									"privileges_updated",
-									"privilege_added",
-									"privilege_removed"
-								],
-								"example": "privilege_removed"
-							}
-						},
-						"example": {
-							"type": "user_place",
-							"action": "member_kicked",
-							"ancestor_name": "Kirill",
-							"place_name": "flat 69"
-						}
-					},
-					"target": {
+					"title": {
 						"type": "string",
-						"description": "Notification target (uuid)",
-						"example": "138043d0-170b-499d-87f7-e72dd66d7a4e"
+						"description": "Notification title",
+						"example": "You were kicked"
+					},
+					"body": {
+						"type": "string",
+						"description": "Notification body",
+						"example": "You were kicked from flat 69"
+					},
+					"type": {
+						"type": "string",
+						"description": "Notification type",
+						"enum": [
+							"intercom_call",
+							"motion_sensor_notification",
+							"user_place",
+							"user_service",
+							"user_privilege"
+						],
+						"example": "intercom_call"
+					},
+					"created_at": {
+						"type": "string",
+						"description": "Notification time",
+						"example": "2022-12-26T16:33:00.965+00:00"
 					}
 				}
 			},
