@@ -394,7 +394,7 @@
         "tags": ["Settings"]
       }
     },
-    "/api/v1/activityTracker/{period}/{limit}": {
+    "/api/v1/activity": {
       "get": {
         "operationId": "ActivityTrackerController_listActivityNotes",
         "summary": "Lists the user's activity",
@@ -402,7 +402,7 @@
         "parameters": [
           {
             "name": "period",
-            "required": true,
+            "required": false,
             "in": "path",
             "schema": { "type": "number" }
           },
