@@ -394,15 +394,14 @@
         "tags": ["Settings"]
       }
     },
-    "/api/v1/activityTracker/{period}/{limit}": {
+    "/api/v1/activity": {
       "get": {
         "operationId": "ActivityTrackerController_listActivityNotes",
         "summary": "Lists the user's activity",
-        "deprecated": true,
         "parameters": [
           {
-            "name": "period",
-            "required": true,
+            "name": "query",
+            "required": false,
             "in": "path",
             "schema": { "type": "number" }
           },
@@ -4532,6 +4531,10 @@
               {
                 "key": "DEVICE_MODEL",
                 "value": "DKS15374"
+              },
+              {
+                "key": "SERIAL_NUMBER",
+                "value": "9123810"
               }
             ]
           },
